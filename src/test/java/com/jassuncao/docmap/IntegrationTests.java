@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -36,6 +37,8 @@ public class IntegrationTests {
     protected MockMvc mockMvc;
 
     @Autowired
+    private EntityManager entityManager;
+    @Autowired
     private WebApplicationContext webApplicationContext;
 
     @BeforeEach
@@ -54,6 +57,11 @@ public class IntegrationTests {
     protected UUID id(ResultActions mock) throws UnsupportedEncodingException {
         final String response = StringUtils.substringBetween(mock.andReturn().getResponse().getContentAsString(), "\"");
         return UUID.fromString(response);
+    }
+
+    protected <T> T save(T entity) {
+        entityManager.persist(entity);
+        return entity;
     }
 }
 

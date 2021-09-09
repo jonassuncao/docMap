@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum ResponseType {
     CREATED(HttpStatus.CREATED),
     UPDATED(HttpStatus.OK),
-    DELETED(HttpStatus.OK),
+    DELETED(HttpStatus.NO_CONTENT),
     ;
 
     private final HttpStatus status;

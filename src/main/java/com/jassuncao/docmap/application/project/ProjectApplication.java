@@ -21,4 +21,12 @@ public class ProjectApplication {
     public Project when(ProjectCreateCommand command) {
         return projectUseCase.create(command.getName(), command.getDescription());
     }
+
+    public Project when(ProjectUpdateCommand command) {
+        return projectUseCase.update(command.getId(), command.getName(), command.getDescription());
+    }
+
+    public void when(ProjectDeleteCommand command) {
+        projectUseCase.delete(command.getId());
+    }
 }
