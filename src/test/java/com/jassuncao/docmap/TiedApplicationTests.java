@@ -1,4 +1,4 @@
-package com.jassuncao.tied;
+package com.jassuncao.docmap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

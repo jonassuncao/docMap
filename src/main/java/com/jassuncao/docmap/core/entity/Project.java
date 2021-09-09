@@ -1,0 +1,36 @@
+package com.jassuncao.docmap.core.entity;
+
+import javax.persistence.Entity;
+
+@Entity
+public class Project extends Identifier{
+
+    private String name;
+    private String description;
+
+    Project() {
+        super();
+    }
+
+    Project(String name, String description) {
+        setName(name);
+        setDescription(description);
+        inicialize();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    private void setDescription(String description) {
+        this.description = description;
+    }
+}
