@@ -82,7 +82,7 @@ public abstract class AttributeData {
         this.description = description;
     }
 
-    public class AttributeDataEntity extends AttributeData {
+    public static class AttributeDataEntity extends AttributeData {
         private UUID entityId;
 
         public UUID getEntityId() {
@@ -94,7 +94,7 @@ public abstract class AttributeData {
         }
     }
 
-    public class AttributeDataRelationship extends AttributeData {
+    public static class AttributeDataRelationship extends AttributeData {
         private UUID relationshipId;
 
         public UUID getRelationshipId() {

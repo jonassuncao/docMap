@@ -1,8 +1,7 @@
-package com.jassuncao.docmap.domain.relationship;
+package com.jassuncao.docmap.application.relationship;
 
-import com.jassuncao.docmap.domain.Identifier;
+import com.jassuncao.docmap.application.AbstractCommand;
 
-import javax.persistence.Entity;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,9 +9,7 @@ import java.util.UUID;
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 09/09/2021
  */
-
-@Entity
-public class Relationship extends Identifier {
+public class RelationshipCreateCommand extends AbstractCommand {
 
     private String alias;
     private String name;
@@ -23,27 +20,6 @@ public class Relationship extends Identifier {
     private boolean required;
     private boolean uniqueConstraint;
     private String cardinality;
-
-    Relationship() {
-        super();
-    }
-
-    Relationship(RelationshipData data) {
-        update(data);
-        inicialize();
-    }
-
-    void update(RelationshipData data) {
-        setAlias(data.getAlias());
-        setName(data.getName());
-        setEntityTo(data.getEntityTo());
-        data.getRoleTo().ifPresentOrElse(this::setRoleTo, () -> roleTo = null);
-        setEntityFrom(data.getEntityFrom());
-        data.getRoleFrom().ifPresentOrElse(this::setRoleFrom, () -> roleFrom = null);
-        setRequired(data.isRequired());
-        setUniqueConstraint(data.isUniqueConstraint());
-        setCardinality(data.getCardinality());
-    }
 
     public String getAlias() {
         return alias;

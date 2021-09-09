@@ -1,7 +1,9 @@
-package com.jassuncao.docmap.domain.entity;
+package com.jassuncao.docmap.application.entity;
 
-import com.jassuncao.docmap.domain.Identifier;
+import com.jassuncao.docmap.application.AbstractCommand;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,32 +11,18 @@ import java.util.UUID;
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 09/09/2021
  */
+public class EntityCreateCommand extends AbstractCommand {
 
-@javax.persistence.Entity
-public class Entity extends Identifier {
-
+    @NotNull
     private UUID projectId;
+    @NotEmpty
     private String alias;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
+    @NotNull
     private UUID extendId;
-
-    Entity() {
-        super();
-    }
-
-    Entity(EntityData data) {
-        update(data);
-        inicialize();
-    }
-
-    void update(EntityData data) {
-        setProjectId(data.getProjectId());
-        setAlias(data.getAlias());
-        setName(data.getName());
-        setDescription(data.getDescription());
-        data.getExtendId().ifPresentOrElse(this::setExtendId, () -> extendId = null);
-    }
 
     public UUID getProjectId() {
         return projectId;
@@ -48,7 +36,7 @@ public class Entity extends Identifier {
         return alias;
     }
 
-    private void setAlias(String alias) {
+    public void setAlias(String alias) {
         this.alias = alias;
     }
 
@@ -56,7 +44,7 @@ public class Entity extends Identifier {
         return name;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -64,7 +52,7 @@ public class Entity extends Identifier {
         return description;
     }
 
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -72,9 +60,7 @@ public class Entity extends Identifier {
         return Optional.ofNullable(extendId);
     }
 
-    private void setExtendId(UUID extendId) {
+    public void setExtendId(UUID extendId) {
         this.extendId = extendId;
     }
-
-
 }

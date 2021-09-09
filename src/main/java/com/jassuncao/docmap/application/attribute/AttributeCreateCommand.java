@@ -1,21 +1,18 @@
-package com.jassuncao.docmap.domain.attribute;
+package com.jassuncao.docmap.application.attribute;
 
-import com.jassuncao.docmap.domain.Identifier;
+import com.jassuncao.docmap.application.AbstractCommand;
+import com.jassuncao.docmap.domain.attribute.TypeData;
 
-import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 09/09/2021
  */
-
-@Entity
-@DiscriminatorColumn(name = "attribute_type", discriminatorType = DiscriminatorType.STRING)
-public class Attribute extends Identifier {
+public class AttributeCreateCommand extends AbstractCommand {
 
     private String alias;
     private String name;
-    @Enumerated(EnumType.STRING)
     private TypeData type;
     private String length;
     private boolean required;
@@ -23,31 +20,11 @@ public class Attribute extends Identifier {
     private String cardinality;
     private String description;
 
-    Attribute() {
-        super();
-    }
-
-    Attribute(AttributeData data) {
-        update(data);
-        inicialize();
-    }
-
-    void update(AttributeData data) {
-        setAlias(data.getAlias());
-        setName(data.getName());
-        setType(data.getType());
-        setLength(data.getLength());
-        setRequired(data.isRequired());
-        setUniqueConstraint(data.isUnique());
-        setCardinality(data.getCardinality());
-        setDescription(data.getDescription());
-    }
-
     public String getAlias() {
         return alias;
     }
 
-    private void setAlias(String alias) {
+    public void setAlias(String alias) {
         this.alias = alias;
     }
 
@@ -55,7 +32,7 @@ public class Attribute extends Identifier {
         return name;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -63,7 +40,7 @@ public class Attribute extends Identifier {
         return type;
     }
 
-    private void setType(TypeData type) {
+    public void setType(TypeData type) {
         this.type = type;
     }
 
@@ -71,7 +48,7 @@ public class Attribute extends Identifier {
         return length;
     }
 
-    private void setLength(String length) {
+    public void setLength(String length) {
         this.length = length;
     }
 
@@ -79,7 +56,7 @@ public class Attribute extends Identifier {
         return required;
     }
 
-    private void setRequired(boolean required) {
+    public void setRequired(boolean required) {
         this.required = required;
     }
 
@@ -87,7 +64,7 @@ public class Attribute extends Identifier {
         return uniqueConstraint;
     }
 
-    private void setUniqueConstraint(boolean uniqueConstraint) {
+    public void setUniqueConstraint(boolean uniqueConstraint) {
         this.uniqueConstraint = uniqueConstraint;
     }
 
@@ -103,7 +80,33 @@ public class Attribute extends Identifier {
         return description;
     }
 
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public class AttributeCreateEntityCommand extends AttributeCreateCommand {
+
+        private UUID entityId;
+
+        public UUID getEntityId() {
+            return entityId;
+        }
+
+        public void setEntityId(UUID entityId) {
+            this.entityId = entityId;
+        }
+    }
+
+    public class AttributeCreateRelationshipCommand extends AttributeCreateCommand {
+
+        private UUID relationshipId;
+
+        public UUID getRelationshipId() {
+            return relationshipId;
+        }
+
+        public void setRelationshipId(UUID relationshipId) {
+            this.relationshipId = relationshipId;
+        }
     }
 }

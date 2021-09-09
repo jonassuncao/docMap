@@ -20,14 +20,18 @@ public class EntityUseCase {
 
 
     public Entity create(EntityData data) {
-        return null;
+        final Entity entity = new Entity(data);
+        return entityRepository.save(entity);
     }
 
     public Entity update(UUID id, EntityData data) {
-        return null;
+        final Entity entity = entityRepository.getById(id);
+        entity.update(data);
+        return entityRepository.save(entity);
     }
 
-    public Entity delete(UUID id) {
-        return null;
+    public void delete(UUID id) {
+        final Entity entity = entityRepository.getById(id);
+        entityRepository.delete(entity);
     }
 }

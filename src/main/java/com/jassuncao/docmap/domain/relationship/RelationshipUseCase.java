@@ -20,14 +20,18 @@ public class RelationshipUseCase {
 
 
     public Relationship create(RelationshipData data) {
-        return null;
+        final Relationship relationship = new Relationship(data);
+        return relationshipRepository.save(relationship);
     }
 
     public Relationship update(UUID id, RelationshipData data) {
-        return null;
+        final Relationship relationship = relationshipRepository.getById(id);
+        relationship.update(data);
+        return relationshipRepository.save(relationship);
     }
 
-    public Relationship delete(UUID id) {
-        return null;
+    public void delete(UUID id) {
+        final Relationship relationship = relationshipRepository.getById(id);
+        relationshipRepository.delete(relationship);
     }
 }
