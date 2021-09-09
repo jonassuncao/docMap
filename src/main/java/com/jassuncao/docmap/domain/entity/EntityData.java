@@ -1,4 +1,4 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.entity;
 
 import java.util.Optional;
 import java.util.UUID;

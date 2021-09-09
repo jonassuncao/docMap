@@ -1,13 +1,13 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.relationship;
 
-import javax.persistence.Column;
+import com.jassuncao.docmap.domain.Identifier;
+
 import javax.persistence.Entity;
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.UUID;
 
 @Entity
-public class Relationship extends Identifier{
+public class Relationship extends Identifier {
 
     private String alias;
     private String name;
@@ -27,12 +27,13 @@ public class Relationship extends Identifier{
         setAlias(data.getAlias());
         setName(data.getName());
         setEntityTo(data.getEntityTo());
-        data.getRoleTo().ifPresentOrElse(this::setRoleTo, ()-> roleTo = null);
+        data.getRoleTo().ifPresentOrElse(this::setRoleTo, () -> roleTo = null);
         setEntityFrom(data.getEntityFrom());
-        data.getRoleFrom().ifPresentOrElse(this::setRoleFrom, ()-> roleFrom = null);
+        data.getRoleFrom().ifPresentOrElse(this::setRoleFrom, () -> roleFrom = null);
         setRequired(data.isRequired());
         setUniqueConstraint(data.isUniqueConstraint());
         setCardinality(data.getCardinality());
+        inicialize();
     }
 
     public String getAlias() {

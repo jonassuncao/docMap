@@ -1,4 +1,6 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.entity;
+
+import com.jassuncao.docmap.domain.Identifier;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +24,7 @@ public class Entity extends Identifier {
         setName(data.getName());
         setDescription(data.getDescription());
         data.getExtendId().ifPresentOrElse(this::setExtendId, () -> extendId = null);
+        inicialize();
     }
 
     public UUID getProjectId() {

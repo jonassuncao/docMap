@@ -1,4 +1,4 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -11,19 +11,20 @@ public class Identifier implements Serializable {
     @Id()
     private UUID id;
 
-    Identifier() {
+    public Identifier() {
         super();
+        inicialize();
     }
 
     public UUID getId() {
         return id;
     }
 
-     void inicialize() {
-        id = UUID.randomUUID();
-    }
-
     private void setId(UUID id) {
         this.id = id;
+    }
+
+    public void inicialize() {
+        id = UUID.randomUUID();
     }
 }

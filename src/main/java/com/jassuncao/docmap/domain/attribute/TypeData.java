@@ -1,4 +1,4 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.attribute;
 
 public enum TypeData {
     Binary,
@@ -6,5 +6,4 @@ public enum TypeData {
     Integer,
     Number,
     Datetime,
-    ;
 }

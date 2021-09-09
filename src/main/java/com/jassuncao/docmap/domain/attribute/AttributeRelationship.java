@@ -1,6 +1,6 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.attribute;
 
-import com.jassuncao.docmap.core.entity.AttributeData.AttributeDataRelationship;
+import com.jassuncao.docmap.domain.attribute.AttributeData.AttributeDataRelationship;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

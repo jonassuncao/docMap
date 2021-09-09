@@ -1,7 +1,5 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.attribute;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.util.UUID;
 
 public abstract class AttributeData {
@@ -79,7 +77,7 @@ public abstract class AttributeData {
         this.description = description;
     }
 
-    public class AttributeDataEntity extends AttributeData{
+    public class AttributeDataEntity extends AttributeData {
         private UUID entityId;
 
         public UUID getEntityId() {
@@ -91,7 +89,7 @@ public abstract class AttributeData {
         }
     }
 
-    public class AttributeDataRelationship extends AttributeData{
+    public class AttributeDataRelationship extends AttributeData {
         private UUID relationshipId;
 
         public UUID getRelationshipId() {

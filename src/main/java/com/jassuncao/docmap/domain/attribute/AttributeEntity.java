@@ -1,8 +1,9 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.attribute;
 
+import com.jassuncao.docmap.domain.attribute.AttributeData.AttributeDataEntity;
+
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.*;
-import com.jassuncao.docmap.core.entity.AttributeData.AttributeDataEntity;
 import java.util.UUID;
 
 @Entity

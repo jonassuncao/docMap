@@ -1,9 +1,11 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.project;
+
+import com.jassuncao.docmap.domain.Identifier;
 
 import javax.persistence.Entity;
 
 @Entity
-public class Project extends Identifier{
+public class Project extends Identifier {
 
     private String name;
     private String description;

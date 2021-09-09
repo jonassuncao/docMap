@@ -1,10 +1,11 @@
-package com.jassuncao.docmap.core.entity;
+package com.jassuncao.docmap.domain.attribute;
+
+import com.jassuncao.docmap.domain.Identifier;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorColumn(name="attribute_type",discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "attribute_type", discriminatorType = DiscriminatorType.STRING)
 public class Attribute extends Identifier {
 
     private String alias;
@@ -30,6 +31,7 @@ public class Attribute extends Identifier {
         setUniqueConstraint(data.isUnique());
         setCardinality(data.getCardinality());
         setDescription(data.getDescription());
+        inicialize();
     }
 
     public String getAlias() {
