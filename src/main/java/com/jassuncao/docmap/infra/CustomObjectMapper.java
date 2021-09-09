@@ -26,7 +26,6 @@ public class CustomObjectMapper extends ObjectMapper {
 
     private Module module() {
         final SimpleModule module = new SimpleModule();
-        module.addSerializer(String.class, new StringSerializer());
         module.addDeserializer(String.class, new StringDeserializer());
         return module;
     }

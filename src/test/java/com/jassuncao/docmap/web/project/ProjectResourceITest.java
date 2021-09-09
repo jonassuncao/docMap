@@ -7,10 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 class ProjectResourceITest extends IntegrationTests {
@@ -22,17 +21,20 @@ class ProjectResourceITest extends IntegrationTests {
     @Test
     void create() throws Exception {
         final var command = new ProjectCreateCommand();
-        command.setName(" Mapa escolar ");
-        command.setDescription("Vestibulum suscipit accumsan viverra. Phasellus mattis nisi facilisis, malesuada purus ut, interdum nunc. Aenean accumsan enim quis lectus dictum lacinia.");
+        command.setName("Mapa escolar");
+        command.setDescription("Vestibulum suscipit accumsan viverra.");
 
-        mockMvc.perform(post("/api/projects")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body(command)));
+        final var mock = mockMvc.perform(post("/api/projects")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body(command)))
+                .andExpect(status().isCreated());
 
-        final var result = projectRepository.getById(UUID.randomUUID());
+        assertThat(headerMessage(mock)).isEqualTo("project.created");
+
+        final var result = projectRepository.getById(id(mock));
 
         assertThat(result.getName()).isEqualTo("Mapa escolar");
-        assertThat(result.getName()).isEqualTo("Vestibulum suscipit accumsan viverra. Phasellus mattis nisi facilisis, malesuada purus ut, interdum nunc. Aenean accumsan enim quis lectus dictum lacinia.");
+        assertThat(result.getDescription()).isEqualTo("Vestibulum suscipit accumsan viverra.");
     }
 
 

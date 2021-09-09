@@ -2,6 +2,9 @@ package com.jassuncao.docmap.web.project;
 
 import com.jassuncao.docmap.application.project.ProjectApplication;
 import com.jassuncao.docmap.application.project.ProjectCreateCommand;
+import com.jassuncao.docmap.domain.project.Project;
+import com.jassuncao.docmap.web.ResponseUtils;
+import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +29,6 @@ public class ProjectResource {
     @PostMapping()
     public ResponseEntity<UUID> create(@RequestBody ProjectCreateCommand command) {
         final var result = projectApplication.when(command);
-        return ResponseEntity.ok(result.getId());
+        return ResponseUtils.created(Project.class, result.getId());
     }
 }
