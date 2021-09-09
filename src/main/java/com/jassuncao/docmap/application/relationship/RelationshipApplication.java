@@ -34,9 +34,9 @@ public class RelationshipApplication {
         final RelationshipData data = new RelationshipData();
         data.setAlias(command.getAlias());
         data.setName(command.getName());
-        data.setEntityTo(command.getEntityTo());
+        data.setEntityToId(command.getEntityToId());
         command.getRoleTo().ifPresent(data::setRoleTo);
-        data.setEntityFrom(command.getEntityFrom());
+        data.setEntityFromId(command.getEntityFromId());
         command.getRoleFrom().ifPresent(data::setRoleFrom);
         data.setRequired(command.isRequired());
         data.setUniqueConstraint(command.isUniqueConstraint());

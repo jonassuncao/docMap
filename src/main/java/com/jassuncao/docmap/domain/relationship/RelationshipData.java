@@ -12,9 +12,9 @@ public class RelationshipData {
 
     private String alias;
     private String name;
-    private UUID entityTo;
+    private UUID entityToId;
     private String roleTo;
-    private UUID entityFrom;
+    private UUID entityFromId;
     private String roleFrom;
     private boolean required;
     private boolean uniqueConstraint;
@@ -36,12 +36,12 @@ public class RelationshipData {
         this.name = name;
     }
 
-    public UUID getEntityTo() {
-        return entityTo;
+    public UUID getEntityToId() {
+        return entityToId;
     }
 
-    public void setEntityTo(UUID entityTo) {
-        this.entityTo = entityTo;
+    public void setEntityToId(UUID entityToId) {
+        this.entityToId = entityToId;
     }
 
     public Optional<String> getRoleTo() {
@@ -52,12 +52,12 @@ public class RelationshipData {
         this.roleTo = roleTo;
     }
 
-    public UUID getEntityFrom() {
-        return entityFrom;
+    public UUID getEntityFromId() {
+        return entityFromId;
     }
 
-    public void setEntityFrom(UUID entityFrom) {
-        this.entityFrom = entityFrom;
+    public void setEntityFromId(UUID entityFromId) {
+        this.entityFromId = entityFromId;
     }
 
     public Optional<String> getRoleFrom() {

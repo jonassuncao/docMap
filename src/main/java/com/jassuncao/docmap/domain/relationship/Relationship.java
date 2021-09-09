@@ -16,9 +16,9 @@ public class Relationship extends Identifier {
 
     private String alias;
     private String name;
-    private UUID entityTo;
+    private UUID entityToId;
     private String roleTo;
-    private UUID entityFrom;
+    private UUID entityFromId;
     private String roleFrom;
     private boolean required;
     private boolean uniqueConstraint;
@@ -36,9 +36,9 @@ public class Relationship extends Identifier {
     void update(RelationshipData data) {
         setAlias(data.getAlias());
         setName(data.getName());
-        setEntityTo(data.getEntityTo());
+        setEntityToId(data.getEntityToId());
         data.getRoleTo().ifPresentOrElse(this::setRoleTo, () -> roleTo = null);
-        setEntityFrom(data.getEntityFrom());
+        setEntityFromId(data.getEntityFromId());
         data.getRoleFrom().ifPresentOrElse(this::setRoleFrom, () -> roleFrom = null);
         setRequired(data.isRequired());
         setUniqueConstraint(data.isUniqueConstraint());
@@ -61,12 +61,12 @@ public class Relationship extends Identifier {
         this.name = name;
     }
 
-    public UUID getEntityTo() {
-        return entityTo;
+    public UUID getEntityToId() {
+        return entityToId;
     }
 
-    public void setEntityTo(UUID entityTo) {
-        this.entityTo = entityTo;
+    public void setEntityToId(UUID entityTo) {
+        this.entityToId = entityTo;
     }
 
     public Optional<String> getRoleTo() {
@@ -77,12 +77,12 @@ public class Relationship extends Identifier {
         this.roleTo = roleTo;
     }
 
-    public UUID getEntityFrom() {
-        return entityFrom;
+    public UUID getEntityFromId() {
+        return entityFromId;
     }
 
-    public void setEntityFrom(UUID entityFrom) {
-        this.entityFrom = entityFrom;
+    public void setEntityFromId(UUID entityFrom) {
+        this.entityFromId = entityFrom;
     }
 
     public Optional<String> getRoleFrom() {

@@ -53,6 +53,7 @@ class EntityResourceITest extends IntegrationTests {
         assertThat(result.getAlias()).isEqualTo("analise_elemento");
         assertThat(result.getName()).isEqualTo("Análise de Elemento");
         assertThat(result.getDescription()).isEqualTo("Vestibulum suscipit accumsan viverra.");
+        assertThat(result.getExtendId()).isEmpty();
     }
 
     @Test
@@ -78,6 +79,7 @@ class EntityResourceITest extends IntegrationTests {
         assertThat(result.getAlias()).isEqualTo("avaliacao");
         assertThat(result.getName()).isEqualTo("Avaliação");
         assertThat(result.getDescription()).isEqualTo("Nunc felis neque, ornare a efficitur ac, efficitur vitae risus.");
+        assertThat(result.getExtendId()).isEmpty();
     }
 
     @Test
