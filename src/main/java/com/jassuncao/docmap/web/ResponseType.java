@@ -15,7 +15,7 @@ public enum ResponseType {
 
     private final HttpStatus status;
 
-    private ResponseType(HttpStatus status) {
+    ResponseType(HttpStatus status) {
         this.status = status;
     }
 
@@ -24,7 +24,7 @@ public enum ResponseType {
         return String.format("%s.%s", name, name()).toLowerCase();
     }
 
-    public HttpStatus getHttpStatus(){
+    public HttpStatus getHttpStatus() {
         return status;
     }
 }

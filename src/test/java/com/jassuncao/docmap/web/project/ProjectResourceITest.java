@@ -10,14 +10,11 @@ import org.springframework.http.MediaType;
 
 import static com.jassuncao.docmap.domain.project.ProjectTestData.createProject;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 class ProjectResourceITest extends IntegrationTests {
-
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -28,7 +25,7 @@ class ProjectResourceITest extends IntegrationTests {
         command.setName("Mapa escolar");
         command.setDescription("Vestibulum suscipit accumsan viverra.");
 
-        final var mock = mockMvc.perform(post("/api/projects")
+        final var mock = mockMvc().perform(post("/api/projects")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body(command)))
                 .andExpect(status().isCreated());
@@ -49,7 +46,7 @@ class ProjectResourceITest extends IntegrationTests {
         command.setName("Portal da transparência");
         command.setDescription("Nunc felis neque, ornare a efficitur ac, efficitur vitae risus.");
 
-        final var mock = mockMvc.perform(put("/api/projects/{id}", project.getId())
+        final var mock = mockMvc().perform(put("/api/projects/{id}", project.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body(command)))
                 .andExpect(status().isOk());
@@ -67,7 +64,7 @@ class ProjectResourceITest extends IntegrationTests {
     void destroy() throws Exception {
         final var project = save(createProject().build());
 
-        final var mock = mockMvc.perform(delete("/api/projects/{id}", project.getId())
+        final var mock = mockMvc().perform(delete("/api/projects/{id}", project.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -77,6 +74,5 @@ class ProjectResourceITest extends IntegrationTests {
 
         assertThat(result).isEmpty();
     }
-
 
 }

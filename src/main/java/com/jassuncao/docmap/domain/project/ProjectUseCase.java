@@ -1,6 +1,5 @@
 package com.jassuncao.docmap.domain.project;
 
-import com.jassuncao.docmap.application.project.ProjectCreateCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

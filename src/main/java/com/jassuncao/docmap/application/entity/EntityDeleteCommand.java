@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class EntityDeleteCommand extends AbstractCommand {
 
-    private UUID id;
+    private final UUID id;
 
     public EntityDeleteCommand(UUID id) {
         this.id = id;

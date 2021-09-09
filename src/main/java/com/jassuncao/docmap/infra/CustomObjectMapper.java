@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import java.util.Optional;
+
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 09/09/2021
@@ -26,6 +28,7 @@ public class CustomObjectMapper extends ObjectMapper {
 
     private Module module() {
         final SimpleModule module = new SimpleModule();
+        module.addSerializer(Optional.class, new OptionalSerializer());
         module.addDeserializer(String.class, new StringDeserializer());
         return module;
     }

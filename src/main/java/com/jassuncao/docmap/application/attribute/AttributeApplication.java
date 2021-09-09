@@ -46,7 +46,6 @@ public class AttributeApplication {
         return attributeRelationshipUseCase.create(data);
     }
 
-
     public Attribute when(AttributeUpdateCommand command) {
         return new OptionalMapper<Attribute>(command)
                 .ifCast(AttributeUpdateEntityCommand.class, this::updateAttribute)

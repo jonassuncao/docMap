@@ -19,11 +19,11 @@ public abstract class ResponseUtils {
         return responseEntity(ResponseType.CREATED, response, resource);
     }
 
-    public static ResponseEntity<UUID> updated(Serializable response, Class<Project> resource) {
+    public static ResponseEntity<UUID> updated(Serializable response, Class resource) {
         return responseEntity(ResponseType.UPDATED, response, resource);
     }
 
-    public static ResponseEntity<UUID> deleted(Class<Project> resource) {
+    public static ResponseEntity<UUID> deleted(Class resource) {
         final ResponseType responseType = ResponseType.DELETED;
         return ResponseEntity.noContent().headers(responseHeaders(responseType.message(resource))).build();
     }

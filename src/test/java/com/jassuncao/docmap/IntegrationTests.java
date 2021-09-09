@@ -2,9 +2,9 @@ package com.jassuncao.docmap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jassuncao.docmap.infra.ApplicationConfiguration;
 import com.jassuncao.docmap.infra.ProfileApplication;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,20 +34,19 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @ExtendWith(SpringExtension.class)
 public class IntegrationTests {
 
-    protected MockMvc mockMvc;
-
+    @Autowired
+    private ApplicationConfiguration configuration;
     @Autowired
     private EntityManager entityManager;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @BeforeEach
-    void setup() {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+    protected MockMvc mockMvc() throws Exception {
+        return webAppContextSetup(webApplicationContext).build();
     }
 
     protected byte[] body(Serializable request) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(request).getBytes();
+        return configuration.jsonMapper().writeValueAsString(request).getBytes();
     }
 
     protected String headerMessage(ResultActions mock) {

@@ -21,7 +21,6 @@ public class EntityCreateCommand extends AbstractCommand {
     private String name;
     @NotEmpty
     private String description;
-    @NotNull
     private UUID extendId;
 
     public UUID getProjectId() {

@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class ProjectDeleteCommand extends AbstractCommand {
 
-    private UUID id;
+    private final UUID id;
 
     public ProjectDeleteCommand(UUID id) {
         this.id = id;

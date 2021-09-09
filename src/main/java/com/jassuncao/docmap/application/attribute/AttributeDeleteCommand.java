@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class AttributeDeleteCommand extends AbstractCommand {
 
-    private UUID id;
+    private final UUID id;
 
     public AttributeDeleteCommand(UUID id) {
         this.id = id;
