@@ -5,6 +5,11 @@ import com.jassuncao.docmap.domain.Identifier;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 @javax.persistence.Entity
 public class Entity extends Identifier {
 

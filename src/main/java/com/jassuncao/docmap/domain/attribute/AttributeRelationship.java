@@ -6,6 +6,11 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.util.UUID;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 @Entity
 @DiscriminatorValue("RELATIONSHIP")
 public class AttributeRelationship extends Attribute {

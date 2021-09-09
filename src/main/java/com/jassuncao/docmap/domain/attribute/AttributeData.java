@@ -2,6 +2,11 @@ package com.jassuncao.docmap.domain.attribute;
 
 import java.util.UUID;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 public abstract class AttributeData {
 
     private String alias;

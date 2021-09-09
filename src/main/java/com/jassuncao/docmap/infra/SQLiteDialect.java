@@ -8,6 +8,11 @@ import org.hibernate.type.StringType;
 
 import java.sql.Types;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {

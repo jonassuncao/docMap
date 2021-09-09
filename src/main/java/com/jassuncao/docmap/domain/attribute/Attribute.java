@@ -4,6 +4,11 @@ import com.jassuncao.docmap.domain.Identifier;
 
 import javax.persistence.*;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 @Entity
 @DiscriminatorColumn(name = "attribute_type", discriminatorType = DiscriminatorType.STRING)
 public class Attribute extends Identifier {

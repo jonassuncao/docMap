@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 @Entity
 public class Relationship extends Identifier {
 

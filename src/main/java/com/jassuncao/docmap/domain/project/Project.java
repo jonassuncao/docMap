@@ -4,6 +4,11 @@ import com.jassuncao.docmap.domain.Identifier;
 
 import javax.persistence.Entity;
 
+/**
+ * @author jonathas.assuncao - jaa020399@gmail.com
+ * 09/09/2021
+ */
+
 @Entity
 public class Project extends Identifier {
 
@@ -15,9 +20,13 @@ public class Project extends Identifier {
     }
 
     Project(String name, String description) {
+        update(name, description);
+        inicialize();
+    }
+
+    void update(String name, String description) {
         setName(name);
         setDescription(description);
-        inicialize();
     }
 
     public String getName() {
