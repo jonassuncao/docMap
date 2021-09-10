@@ -11,4 +11,5 @@ public enum TypeData {
     Integer,
     Number,
     Datetime,
+    Boolean
 }

@@ -32,7 +32,6 @@ public class AttributeEntityUseCase {
     }
 
     public void delete(UUID id) {
-        final AttributeEntity attribute = attributeEntityRepository.getById(id);
-        attributeEntityRepository.delete(attribute);
+        attributeEntityRepository.findById(id).ifPresent(attributeEntityRepository::delete);
     }
 }

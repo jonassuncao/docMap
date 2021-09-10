@@ -18,6 +18,10 @@ public class RelationshipTestData {
     private boolean uniqueConstraint;
     private String cardinality = "1:1";
 
+    public static RelationshipTestData createRelationship() {
+        return new RelationshipTestData();
+    }
+
     public RelationshipTestData alias(String alias) {
         this.alias = alias;
         return this;
@@ -63,7 +67,6 @@ public class RelationshipTestData {
         return this;
     }
 
-
     public RelationshipData data() {
         final RelationshipData data = new RelationshipData();
         data.setAlias(alias);
@@ -80,9 +83,5 @@ public class RelationshipTestData {
 
     public Relationship build() {
         return new Relationship(data());
-    }
-
-    public static RelationshipTestData createRelationship() {
-        return new RelationshipTestData();
     }
 }

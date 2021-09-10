@@ -14,6 +14,10 @@ public class EntityTestData {
     private String description = "Descrição";
     private UUID extendId;
 
+    public static EntityTestData createEntity() {
+        return new EntityTestData();
+    }
+
     public EntityTestData projectId(UUID projectId) {
         this.projectId = projectId;
         return this;
@@ -51,9 +55,5 @@ public class EntityTestData {
 
     public Entity build() {
         return new Entity(data());
-    }
-
-    public static EntityTestData createEntity() {
-        return new EntityTestData();
     }
 }

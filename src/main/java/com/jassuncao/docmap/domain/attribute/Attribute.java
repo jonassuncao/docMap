@@ -3,6 +3,7 @@ package com.jassuncao.docmap.domain.attribute;
 import com.jassuncao.docmap.domain.Identifier;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -36,11 +37,11 @@ public class Attribute extends Identifier {
         setAlias(data.getAlias());
         setName(data.getName());
         setType(data.getType());
-        setLength(data.getLength());
+        data.getLength().ifPresentOrElse(this::setLength, () -> length = null);
         setRequired(data.isRequired());
         setUniqueConstraint(data.isUnique());
         setCardinality(data.getCardinality());
-        setDescription(data.getDescription());
+        data.getDescription().ifPresentOrElse(this::setDescription, () -> description = null);
     }
 
     public String getAlias() {
@@ -67,8 +68,8 @@ public class Attribute extends Identifier {
         this.type = type;
     }
 
-    public String getLength() {
-        return length;
+    public Optional<String> getLength() {
+        return Optional.ofNullable(length);
     }
 
     private void setLength(String length) {
@@ -99,8 +100,8 @@ public class Attribute extends Identifier {
         this.cardinality = cardinality;
     }
 
-    public String getDescription() {
-        return description;
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     private void setDescription(String description) {

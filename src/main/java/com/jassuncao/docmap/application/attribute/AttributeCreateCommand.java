@@ -1,22 +1,36 @@
 package com.jassuncao.docmap.application.attribute;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.jassuncao.docmap.application.AbstractCommand;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 09/09/2021
  */
-public class AttributeCreateCommand extends AbstractCommand {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "attribute_type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = AttributeCreateCommand.AttributeCreateEntityCommand.class, name = "ENTITY"),
+        @JsonSubTypes.Type(value = AttributeCreateCommand.AttributeCreateRelationshipCommand.class, name = "RELATIONSHIP")
+})
+public abstract class AttributeCreateCommand extends AbstractCommand {
 
+    @NotEmpty
     private String alias;
+    @NotEmpty
     private String name;
+    @NotNull
     private TypeData type;
     private String length;
     private boolean required;
     private boolean uniqueConstraint;
+    @NotEmpty
     private String cardinality;
     private String description;
 
@@ -44,8 +58,8 @@ public class AttributeCreateCommand extends AbstractCommand {
         this.type = type;
     }
 
-    public String getLength() {
-        return length;
+    public Optional<String> getLength() {
+        return Optional.ofNullable(length);
     }
 
     public void setLength(String length) {
@@ -76,16 +90,17 @@ public class AttributeCreateCommand extends AbstractCommand {
         this.cardinality = cardinality;
     }
 
-    public String getDescription() {
-        return description;
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public class AttributeCreateEntityCommand extends AttributeCreateCommand {
+    public static class AttributeCreateEntityCommand extends AttributeCreateCommand {
 
+        @NotNull
         private UUID entityId;
 
         public UUID getEntityId() {
@@ -97,8 +112,9 @@ public class AttributeCreateCommand extends AbstractCommand {
         }
     }
 
-    public class AttributeCreateRelationshipCommand extends AttributeCreateCommand {
+    public static class AttributeCreateRelationshipCommand extends AttributeCreateCommand {
 
+        @NotNull
         private UUID relationshipId;
 
         public UUID getRelationshipId() {

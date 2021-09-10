@@ -1,7 +1,6 @@
 package com.jassuncao.docmap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jassuncao.docmap.infra.ApplicationConfiguration;
 import com.jassuncao.docmap.infra.ProfileApplication;
 import org.apache.commons.lang3.StringUtils;

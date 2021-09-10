@@ -35,14 +35,14 @@ public class AttributeApplication {
     private AttributeEntity createAttribute(AttributeCreateEntityCommand command) {
         final AttributeDataEntity data = new AttributeDataEntity();
         data.setEntityId(command.getEntityId());
-        attibuteHelper(command, data);
+        attributeHelper(command, data);
         return attributeEntityUseCase.create(data);
     }
 
     private AttributeRelationship createAttribute(AttributeCreateRelationshipCommand command) {
         final AttributeDataRelationship data = new AttributeDataRelationship();
         data.setRelationshipId(command.getRelationshipId());
-        attibuteHelper(command, data);
+        attributeHelper(command, data);
         return attributeRelationshipUseCase.create(data);
     }
 
@@ -56,14 +56,14 @@ public class AttributeApplication {
     private AttributeEntity updateAttribute(AttributeUpdateEntityCommand command) {
         final AttributeDataEntity data = new AttributeDataEntity();
         data.setEntityId(command.getEntityId());
-        attibuteHelper(command, data);
+        attributeHelper(command, data);
         return attributeEntityUseCase.update(command.getId(), data);
     }
 
     private AttributeRelationship updateAttribute(AttributeUpdateRelationshipCommand command) {
         final AttributeDataRelationship data = new AttributeDataRelationship();
         data.setRelationshipId(command.getRelationshipId());
-        attibuteHelper(command, data);
+        attributeHelper(command, data);
         return attributeRelationshipUseCase.update(command.getId(), data);
     }
 
@@ -72,14 +72,14 @@ public class AttributeApplication {
         attributeRelationshipUseCase.delete(command.getId());
     }
 
-    private void attibuteHelper(AttributeCreateCommand command, AttributeData data) {
+    private void attributeHelper(AttributeCreateCommand command, AttributeData data) {
         data.setAlias(command.getAlias());
         data.setName(command.getName());
         data.setType(command.getType());
-        data.setLength(command.getLength());
+        command.getLength().ifPresent(data::setLength);
         data.setRequired(command.isRequired());
         data.setUnique(command.isUniqueConstraint());
         data.setCardinality(command.getCardinality());
-        data.setDescription(command.getDescription());
+        command.getDescription().ifPresent(data::setDescription);
     }
 }

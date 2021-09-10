@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class RelationshipDeleteCommand extends AbstractCommand {
 
-    private UUID id;
+    private final UUID id;
 
     public RelationshipDeleteCommand(UUID id) {
         this.id = id;

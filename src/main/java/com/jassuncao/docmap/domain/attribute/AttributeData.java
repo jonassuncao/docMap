@@ -1,5 +1,6 @@
 package com.jassuncao.docmap.domain.attribute;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -42,8 +43,8 @@ public abstract class AttributeData {
         this.type = type;
     }
 
-    public String getLength() {
-        return length;
+    public Optional<String> getLength() {
+        return Optional.ofNullable(length);
     }
 
     public void setLength(String length) {
@@ -74,8 +75,8 @@ public abstract class AttributeData {
         this.cardinality = cardinality;
     }
 
-    public String getDescription() {
-        return description;
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     public void setDescription(String description) {

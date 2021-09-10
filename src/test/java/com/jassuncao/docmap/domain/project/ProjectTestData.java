@@ -9,6 +9,10 @@ public class ProjectTestData {
     private String name = "Projeto";
     private String description = "Descrição";
 
+    public static ProjectTestData createProject() {
+        return new ProjectTestData();
+    }
+
     public ProjectTestData name(String name) {
         this.name = name;
         return this;
@@ -21,9 +25,5 @@ public class ProjectTestData {
 
     public Project build() {
         return new Project(name, description);
-    }
-
-    public static ProjectTestData createProject() {
-        return new ProjectTestData();
     }
 }

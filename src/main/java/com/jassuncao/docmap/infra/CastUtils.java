@@ -9,9 +9,6 @@ import java.util.Optional;
 public abstract class CastUtils {
 
     public static <T> Optional<T> ifCast(Object data, Class<T> target) {
-        if (data instanceof Class) {
-            return Optional.ofNullable(target.cast(data));
-        }
-        return Optional.empty();
+        return Optional.ofNullable(target).filter(t -> t.isInstance(data)).map(t -> t.cast(data));
     }
 }
