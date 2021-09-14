@@ -1,6 +1,8 @@
 package com.jassuncao.docmap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.jassuncao.docmap.infra.ApplicationConfiguration;
 import com.jassuncao.docmap.infra.ProfileApplication;
 import org.apache.commons.lang3.StringUtils;
@@ -8,7 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
@@ -27,10 +32,15 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * 09/09/2021
  */
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 @Profile(ProfileApplication.DEV)
 @ExtendWith(SpringExtension.class)
+@TestExecutionListeners(value = {
+        DbUnitTestExecutionListener.class,
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class
+}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class IntegrationTests {
 
     @Autowired
@@ -59,6 +69,7 @@ public class IntegrationTests {
 
     protected <T> T save(T entity) {
         entityManager.persist(entity);
+        entityManager.flush();
         return entity;
     }
 }

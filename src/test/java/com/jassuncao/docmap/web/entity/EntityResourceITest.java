@@ -1,5 +1,6 @@
 package com.jassuncao.docmap.web.entity;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.application.entity.EntityCreateCommand;
 import com.jassuncao.docmap.application.entity.EntityUpdateCommand;

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <entity id="7058a3c7-2a0f-453b-bbee-ff69491c27a3" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="analise_elemento" name="Análise de Elemento"/>
+    <entity id="1920ace6-17de-48d9-a089-4af11f51b85e" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="avaliacao" name="Avaliação"/>
+    <entity id="8a5ccddc-16c3-4d29-af4b-2698884f52b7" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="comentario" name="Comentário"/>
+    <entity id="3552b9b1-db64-4d23-8eaf-3cee97667f0c" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="contexto_educacional" name="Contexto Educacional"/>
+    <entity id="5c91cdf7-5a1a-4137-88f9-e7482a716995" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="dimensao_educacional" name="Dimensão Educacional"/>
+    <entity id="1fe9817f-1f43-4f87-9bf5-0633354f7128" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="elemento_educacional" name="Elemento Educacional"/>
+    <entity id="f8ba51a0-3cec-403d-b1df-c29c6f2b5516" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            extend_id="3552b9b1-db64-4d23-8eaf-3cee97667f0c" alias="escola" name="Escola"/>
+    <entity id="62e01eed-e80f-463c-9ce1-6efd4eba6895" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="funcionalidade" name="Funcionalidade"/>
+    <entity id="ff5ceb01-bde8-4559-a42d-5e9c65fcdf34" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            extend_id="3552b9b1-db64-4d23-8eaf-3cee97667f0c" alias="municipio" name="Município"/>
+    <entity id="b53c9560-2987-40af-a68f-41c7972bc2b6" project_id="c262ee00-de56-4613-a19c-85736ddd3803" alias="noticia"
+            name="Notícia"/>
+    <entity id="8e4c13d7-89e5-4d86-868c-3a736ad4cc3b" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="papel_sistema" name="Papel no Sistema"/>
+    <entity id="865a09ab-f743-4822-881e-9f3e857056c5" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="perfil_usuario" name="Perfil de Usuário"/>
+    <entity id="2ec84110-99e9-4d4a-a6d2-b52f31896b38" project_id="c262ee00-de56-4613-a19c-85736ddd3803" alias="pessoa"
+            name="Pessoa"/>
+    <entity id="0a13f747-3635-40ab-a3c2-b3916081f869" project_id="c262ee00-de56-4613-a19c-85736ddd3803" alias="questao"
+            name="Questão"/>
+    <entity id="733c6662-7031-40ec-ad83-f32a9b7b23e6" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            extend_id="1920ace6-17de-48d9-a089-4af11f51b85e" alias="reclamacao" name="Reclamação"/>
+    <entity id="88fd7d94-cabb-4d28-abcf-050968721166" project_id="c262ee00-de56-4613-a19c-85736ddd3803" alias="resposta"
+            name="Resposta"/>
+    <entity id="4284e5e3-3143-4380-965e-66aac76e3bb1" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            alias="tratmento_reclamacao" name="Tratamento de Reclamação"/>
+    <entity id="294fbe0a-2bf6-4727-9026-ebb0e05ce61c" project_id="c262ee00-de56-4613-a19c-85736ddd3803"
+            extend_id="3552b9b1-db64-4d23-8eaf-3cee97667f0c" alias="unidade_federativa" name="Unidade Federativa"/>
+    <entity id="937a40bc-0ddd-46cf-8131-62a48ffe7570" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="afastamento"
+            description="Especialização de Atividade." name="Afastamento"/>
+    <entity id="db947865-d647-47cf-93e9-e7ee1b403610" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            alias="atividade" name="Atividade"/>
+    <entity id="5e75cbd4-9f96-469f-9311-8511fb3d8922" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="atividade_academica_especial"
+            description="Especialização de Atividade." name="Atividade Acadêmica Especial"/>
+    <entity id="e5ed5a81-b249-4c99-878d-f6ddf25c967d" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="atividade_administrativa"
+            description="Especialização de Atividade." name="Atividade Administrativa"/>
+    <entity id="ab6a66fa-acb8-4dbd-bfbe-c12df9dbdc8e" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="atividade_ensino" name="Atividade de Ensino"/>
+    <entity id="a15e378c-cc6d-4b6f-a619-c1255c8b2ac5" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="ab6a66fa-acb8-4dbd-bfbe-c12df9dbdc8e" alias="atividade_ensino_pos_graduacao"
+            description="Especialização de Atividade de Ensino." name="Atividade de Ensino Pós-Graduação"/>
+    <entity id="032a23f4-caf6-42ad-a0f1-522eda18e1cc" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="ab6a66fa-acb8-4dbd-bfbe-c12df9dbdc8e" alias="atividade_ensino_regime_graduacao_semestral"
+            description="Especialização de Atividade de Ensino."
+            name="Atividade de Ensino Regime de Graduação Semestral"/>
+    <entity id="baf721a8-1d23-474a-bf45-b0cded909191" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="atividade_extensao"
+            description="Especialização de Atividade." name="Atividade de Extensão"/>
+    <entity id="3d07427d-ced0-41cc-907f-270cce668c53" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="representa_discente_orientado_docente"
+            description="Especialização de Atividade." name="Representa um discente orientado pelo docente."/>
+    <entity id="5ddf130a-6771-4633-8e21-994b0c9f8cbd" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="atividade_qualificacao"
+            description="Especialização de Atividade." name="Atividade de Qualificação"/>
+    <entity id="00ee2371-31da-476a-8ca0-4b16187b4ce8" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="atividade_projetos"
+            description="Especialização de Atividade." name="Atividade em Projetos"/>
+    <entity id="88ceda2f-7de6-4bcf-acd7-86fd690561d0" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd" alias="discente"
+            name="Discente"/>
+    <entity id="e26a0ee8-8c4e-4fa3-a654-c4e10097bf72" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            alias="disciplina" name="Disciplina"/>
+    <entity id="c4b5ee53-b0bd-4a6d-9979-d88a7c35f3a8" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            alias="diario_turma" name="Diário de Turma"/>
+    <entity id="c9eea09a-068c-4a36-8f29-5dc0c4049d74" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd" alias="docente"
+            name="Docente"/>
+    <entity id="a6aa0d93-217b-48b9-9faf-1425b8108f03" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            alias="item_resolucao" name="Item de Resolução"/>
+    <entity id="f7d16985-4db2-4f64-a493-82cbf096d02a" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            extend_id="db947865-d647-47cf-93e9-e7ee1b403610" alias="produto" name="Produto"/>
+    <entity id="8c3b2729-82cf-4799-82b5-a468befa6ec3" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd" alias="radoc"
+            name="RADOC"/>
+    <entity id="9c5764d7-7ef6-4212-91d6-9ccfea5cdd3b" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            alias="resolucao" name="Resolução"/>
+    <entity id="2e2dda8d-e059-4067-ba1a-b6db3d19cfd2" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd"
+            alias="resultado" name="Resultado"/>
+    <entity id="f0327706-fc63-47ae-a57d-d42a9cc372bb" project_id="6b6e28fd-96ba-4fbd-bda8-b94d52a9f6fd" alias="tabela"
+            name="Tabela"/>
+</dataset>

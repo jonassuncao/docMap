@@ -1,5 +1,6 @@
 package com.jassuncao.docmap.web.attribute;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.application.attribute.AttributeCreateCommand.AttributeCreateEntityCommand;
 import com.jassuncao.docmap.application.attribute.AttributeCreateCommand.AttributeCreateRelationshipCommand;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 10/09/2021
  */
+@DatabaseSetup({"/dbunit/attribute.xml"})
 class AttributeResourceITest extends IntegrationTests {
 
     @Autowired
