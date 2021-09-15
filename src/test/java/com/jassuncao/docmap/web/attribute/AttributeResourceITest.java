@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 10/09/2021
  */
-@DatabaseSetup({"/dbunit/attribute.xml"})
 class AttributeResourceITest extends IntegrationTests {
 
     @Autowired

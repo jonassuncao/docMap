@@ -29,4 +29,8 @@ public class ProjectApplication {
     public void when(ProjectDeleteCommand command) {
         projectUseCase.delete(command.getId());
     }
+
+    public Object when(ProjectBuildHibernateCommand command) {
+        return projectUseCase.buildHibernate(command.getId());
+    }
 }

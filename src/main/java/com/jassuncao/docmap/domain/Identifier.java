@@ -13,7 +13,7 @@ import java.util.UUID;
 @MappedSuperclass
 public class Identifier implements Serializable {
 
-    @Id()
+    @Id
     private UUID id;
 
     public Identifier() {

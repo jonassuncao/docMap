@@ -13,10 +13,13 @@ import java.util.UUID;
 public class ProjectUseCase {
 
     private final ProjectRepository projectRepository;
+    private final HibernateService hibernateService;
 
-    public ProjectUseCase(ProjectRepository projectRepository) {
+    public ProjectUseCase(ProjectRepository projectRepository, HibernateService hibernateService) {
         this.projectRepository = projectRepository;
+        this.hibernateService = hibernateService;
     }
+
 
     public Project create(String name, String description) {
         final Project project = new Project(name, description);
@@ -32,5 +35,10 @@ public class ProjectUseCase {
     public void delete(UUID id) {
         final Project project = projectRepository.getById(id);
         projectRepository.delete(project);
+    }
+
+    public Object buildHibernate(UUID id) {
+        final Project project = projectRepository.getById(id);
+        return hibernateService.process(project);
     }
 }

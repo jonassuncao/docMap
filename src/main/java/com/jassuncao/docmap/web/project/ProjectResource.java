@@ -1,9 +1,6 @@
 package com.jassuncao.docmap.web.project;
 
-import com.jassuncao.docmap.application.project.ProjectApplication;
-import com.jassuncao.docmap.application.project.ProjectCreateCommand;
-import com.jassuncao.docmap.application.project.ProjectDeleteCommand;
-import com.jassuncao.docmap.application.project.ProjectUpdateCommand;
+import com.jassuncao.docmap.application.project.*;
 import com.jassuncao.docmap.domain.project.Project;
 import com.jassuncao.docmap.web.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,12 @@ public class ProjectResource {
     public ResponseEntity<UUID> create(@RequestBody ProjectCreateCommand command) {
         final var result = projectApplication.when(command);
         return ResponseUtils.created(result.getId(), Project.class);
+    }
+
+    @PostMapping("/{id}/hibernate")
+    public ResponseEntity<?> hibernate(@PathVariable UUID id) {
+        final var result = projectApplication.when(new ProjectBuildHibernateCommand(id));
+        return ResponseUtils.created(new ProjectBuildHibernateCommand(id).getId(), Project.class);
     }
 
     @PutMapping("/{id}")
