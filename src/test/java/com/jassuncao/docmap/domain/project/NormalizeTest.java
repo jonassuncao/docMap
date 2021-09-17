@@ -2,6 +2,7 @@ package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.UnitTests;
 import com.jassuncao.docmap.infra.ValidationException;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -100,12 +101,25 @@ class NormalizeTest extends UnitTests {
 
     @Test
     void testNormalizeSplitPreserveTokens() throws Exception {
-        final String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut libero justo, ultrices non urna id, elementum ultrices justo. Curabitur molestie velit odio. In ullamcorper vitae arcu vel rutrum. Sed quam metus, fermentum ac leo eu, fringilla rhoncus urna. Ut lacinia maximus turpis in suscipit. Nullam vel velit nec neque hendrerit tempor nec a erat.";
-        final List<String> result = Normalize.splitPreserveTokens(text, 120);
+        final String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+        final List<String> result = Normalize.splitPreserveTokens(text, 29);
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0)).isEqualTo("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut libero justo, ultrices non urna id, elementum ultrices");
-        assertThat(result.get(1)).isEqualTo("justo. Curabitur molestie velit odio. In ullamcorper vitae arcu vel rutrum. Sed quam metus, fermentum ac leo eu,");
+        assertThat(result.get(0)).isEqualTo("Lorem ipsum dolor sit amet,");
+        assertThat(result.get(1)).isEqualTo("consectetur adipiscing elit");
+    }
+
+    @Test
+    void testNormalizeSplitPreserveTokens__withLf() throws Exception {
+        final String text = "Lorem ipsum dolor sit amet, \n consectetur adipiscing elit";
+        final List<String> result = Normalize.splitPreserveTokens(text, 15);
+
+        assertThat(result).hasSize(5);
+        assertThat(result.get(0)).isEqualTo("Lorem ipsum");
+        assertThat(result.get(1)).isEqualTo("dolor sit amet,");
+        assertThat(result.get(2)).isEqualTo(StringUtils.EMPTY);
+        assertThat(result.get(3)).isEqualTo("consectetur");
+        assertThat(result.get(4)).isEqualTo("adipiscing elit");
     }
 
 }

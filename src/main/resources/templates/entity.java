@@ -1,25 +1,42 @@
 package ${package};
 
 import java.io.Serializable;
-<#list imports as import>
-${import}
-</#list>
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 
 /**
- <#list headers as header>
- * ${header}
- </#list>
- */
-
+<#list headers as header>
+* ${header}
+</#list>
+*/
 @Entity
 @Table(name="${entity}")
 public class ${className} implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    <#list attributes as attribute>
-    private ${attribute}
+<#list attributes as attribute>
+ <#if attribute.description?size??>
+    /**
+    <#list attribute.description as desc>
+    * ${desc}
     </#list>
+    */
+ </#if>
+ <#list attribute.options as opt>
+    ${opt}
+ </#list>
+  <#if attribute.column??>
+    ${attribute.column}
+  </#if>
+    private ${attribute.type} ${attribute.name};
+
+</#list>
 
     ${className}() {
         super();

@@ -20,21 +20,21 @@ public class HibernateColumn {
 
     public Optional<String> ifName() {
         if (StringUtils.isMixedCase(Normalize.fieldForm(attribute.getAlias()))) {
-            Optional.of(String.format("name=\"$s\"", Normalize.dataBaseForm(attribute.getAlias())));
+            return Optional.of(String.format("name=\"%s\"", Normalize.dataBaseForm(attribute.getAlias())));
         }
         return Optional.empty();
     }
 
     public Optional<String> ifUnique() {
         if (attribute.isUniqueConstraint()) {
-            Optional.of("unique=true");
+            return Optional.of("unique=true");
         }
         return Optional.empty();
     }
 
     public Optional<String> ifNullable() {
         if (attribute.isRequired()) {
-            Optional.of("nullable=false");
+            return Optional.of("nullable=false");
         }
         return Optional.empty();
     }

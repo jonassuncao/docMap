@@ -4,6 +4,7 @@ import com.jassuncao.docmap.infra.I18nCommon;
 import com.jassuncao.docmap.infra.ValidationException;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,19 +53,31 @@ public final class Normalize {
 
     public static List<String> splitPreserveTokens(String value, int maxLineLength) {
         if (Objects.nonNull(value)) {
-            final StringTokenizer tokenizer = new StringTokenizer(value);
-            final List<String> results = new ArrayList<>();
-            StringBuilder line = new StringBuilder();
-            while (tokenizer.hasMoreTokens()) {
-                final String token = tokenizer.nextToken();
-                if (token.length() + line.length() > maxLineLength) {
-                    results.add(StringUtils.trim(line.toString()));
-                    line = new StringBuilder(StringUtils.EMPTY);
+            final List<String> result = Arrays.stream(StringUtils.split(value, StringUtils.LF)).map(element -> {
+                final StringTokenizer tokenizer = new StringTokenizer(element);
+                final List<String> results = new ArrayList<>();
+                StringBuilder line = new StringBuilder();
+                while (tokenizer.hasMoreTokens()) {
+                    final String token = tokenizer.nextToken();
+                    if (token.length() + line.length() > maxLineLength) {
+                        results.add(StringUtils.trim(line.toString()));
+                        line = new StringBuilder(StringUtils.EMPTY);
+                    }
+                    line.append(token);
+                    line.append(StringUtils.SPACE);
                 }
-                line.append(token);
-                line.append(StringUtils.SPACE);
+                results.add(StringUtils.trim(line.toString()));
+                return results;
+            }).reduce(new LinkedList<>(), (computed, next) -> {
+                computed.add(StringUtils.EMPTY);
+                computed.addAll(next);
+                return computed;
+            });
+            if (!CollectionUtils.isEmpty(result)) {
+                result.remove(0);
             }
-            return results;
+            return result;
+
         }
         throw ValidationException.valueOf(I18nCommon.NORMALIZE_ERROR_SPLITPRESERVETOKENS, value);
     }

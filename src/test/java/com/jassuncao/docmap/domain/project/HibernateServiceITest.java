@@ -1,15 +1,15 @@
 package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.IntegrationTests;
+import com.jassuncao.docmap.domain.attribute.TypeData;
 import com.jassuncao.docmap.domain.entity.Entity;
-import com.jassuncao.docmap.domain.relationship.Relationship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.jassuncao.docmap.domain.attribute.AttributeTestData.createAttribute;
 import static com.jassuncao.docmap.domain.entity.EntityTestData.createEntity;
 import static com.jassuncao.docmap.domain.project.ProjectTestData.createProject;
-import static com.jassuncao.docmap.domain.relationship.RelationshipTestData.createRelationship;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
@@ -24,7 +24,6 @@ class HibernateServiceITest extends IntegrationTests {
     private Project project;
     private Entity entityTo;
     private Entity entityFrom;
-    private Relationship relationship;
 
     @BeforeEach
     void setup() throws Exception {
@@ -38,7 +37,7 @@ class HibernateServiceITest extends IntegrationTests {
                 .alias("pessoa")
                 .name("Pessoa")
                 .build());
-        relationship = save(createRelationship().entityTo(entityTo.getId()).entityFrom(entityFrom.getId()).build());
+        save(createAttribute().entityId(entityTo.getId()).alias("nome atributo").name("consectetur adipiscing elit.").type(TypeData.Text).length("1").required(true).uniqueConstraint(true).description("Lorem ipsum dolor sit amet").buildEntity());
     }
 
     @Test
