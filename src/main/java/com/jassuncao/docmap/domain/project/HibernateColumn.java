@@ -60,7 +60,7 @@ public class HibernateColumn {
         if (TypeData.Number.equals(attribute.getType())) {
             return attribute.getLength().map(length -> StringUtils.substringAfter(length, ","))
                     .filter(StringUtils::isNumeric)
-                    .map(length -> String.format("precision=%s", length));
+                    .map(length -> String.format("scale=%s", length));
         }
         return Optional.empty();
     }

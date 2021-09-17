@@ -28,25 +28,22 @@ public class ${className} implements Serializable {
     </#list>
     */
  </#if>
- <#list attribute.options as opt>
+ <#if attribute.options?size??>
+  <#list attribute.options as opt>
     ${opt}
- </#list>
+  </#list>
+ </#if>
   <#if attribute.column??>
     ${attribute.column}
   </#if>
     private ${attribute.type} ${attribute.name};
 
 </#list>
-
     ${className}() {
         super();
     }
+<#list attributes as attribute>
 
-    private void setTest(String value){
-        this.value = value;
-    }
-
-    protected Optional<String> getTest(){
-        this.value = value;
-    }
+    ${attribute.getSets}
+</#list>
 }

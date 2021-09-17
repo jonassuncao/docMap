@@ -20,16 +20,17 @@ public final class Normalize {
             String formatted = StringUtils.lowerCase(value);
             formatted = StringUtils.stripAccents(formatted);
             formatted = StringUtils.trim(formatted);
-            return StringUtils.remove(formatted, " ");
+            formatted = formatted.replaceAll("[^a-zA-Z0-9]", StringUtils.EMPTY);
+            return StringUtils.remove(formatted, StringUtils.SPACE);
         }
         throw ValidationException.valueOf(I18nCommon.NORMALIZE_ERROR_PACKAGEFORM, value);
     }
 
     public static String classForm(String value) {
         if (StringUtils.isNotEmpty(value) && StringUtils.isAlphaSpace(CharUtils.toString(value.charAt(0)))) {
-            String formatted = StringUtils.lowerCase(value);
-            formatted = StringUtils.stripAccents(formatted);
+            String formatted = StringUtils.stripAccents(value);
             formatted = StringUtils.trim(formatted);
+            formatted = formatted.replaceAll("[^a-zA-Z0-9]", StringUtils.SPACE);
             return Arrays.stream(StringUtils.split(formatted, StringUtils.SPACE)).map(StringUtils::capitalize)
                     .collect(Collectors.joining(StringUtils.EMPTY));
         }
@@ -42,7 +43,8 @@ public final class Normalize {
 
     public static String dataBaseForm(String value) {
         if (StringUtils.isNotEmpty(value) && StringUtils.isAlphaSpace(CharUtils.toString(value.charAt(0)))) {
-            String formatted = StringUtils.lowerCase(value);
+            String formatted = value.replaceAll("([A-Z])", StringUtils.SPACE.concat("$1"));
+            formatted = StringUtils.lowerCase(formatted);
             formatted = StringUtils.stripAccents(formatted);
             formatted = StringUtils.trim(formatted);
             return Arrays.stream(StringUtils.split(formatted, StringUtils.SPACE)).filter(StringUtils::isNoneEmpty)

@@ -14,7 +14,7 @@ public enum TypeData {
     Datetime("LocalDateTime"),
     Date("LocalDate"),
     Timestamp("Instant"),
-    Boolean("boolean");
+    Boolean("Boolean");
 
     private final String type;
 

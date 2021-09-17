@@ -37,7 +37,9 @@ class NormalizeTest extends UnitTests {
                 arguments("Relação ", "relacao"),
                 arguments("Ônibus", "onibus"),
                 arguments(" Básico", "basico"),
-                arguments(" Entidade   Relação ", "entidaderelacao")
+                arguments(" Entidade   Relação ", "entidaderelacao"),
+                arguments("entidadeRelacao", "entidaderelacao"),
+                arguments("entidade_relacao", "entidaderelacao")
         );
     }
 
@@ -50,11 +52,13 @@ class NormalizeTest extends UnitTests {
     static Stream<Arguments> classForm() {
         return Stream.of(
                 arguments("entidade", "Entidade"),
-                arguments(" ENtiDaDe ", "Entidade"),
+                arguments(" Entidade ", "Entidade"),
                 arguments("Relação ", "Relacao"),
                 arguments("Ônibus", "Onibus"),
-                arguments(" BÁSICO", "Basico"),
-                arguments(" ENTIDADE    RELAÇÃO ", "EntidadeRelacao")
+                arguments(" Básico", "Basico"),
+                arguments(" Entidade    Relação ", "EntidadeRelacao"),
+                arguments("entidadeRelacao", "EntidadeRelacao"),
+                arguments("entidade_relacao", "EntidadeRelacao")
         );
     }
 
@@ -67,11 +71,13 @@ class NormalizeTest extends UnitTests {
     static Stream<Arguments> dataBaseForm() {
         return Stream.of(
                 arguments("entidade", "entidade"),
-                arguments(" ENtiDaDe ", "entidade"),
+                arguments(" Entidade ", "entidade"),
                 arguments("Relação ", "relacao"),
                 arguments("Ônibus", "onibus"),
-                arguments(" BÁSICO", "basico"),
-                arguments(" ENTIDADE    RELAÇÃO ", "entidade_relacao")
+                arguments(" Básico", "basico"),
+                arguments(" Entidade    Relação ", "entidade_relacao"),
+                arguments("entidadeRelacao", "entidade_relacao"),
+                arguments("entidade_relacao", "entidade_relacao")
         );
     }
 
@@ -84,11 +90,13 @@ class NormalizeTest extends UnitTests {
     static Stream<Arguments> fieldForm() {
         return Stream.of(
                 arguments("entidade", "entidade"),
-                arguments(" ENtiDaDe ", "entidade"),
+                arguments(" Entidade ", "entidade"),
                 arguments("Relação ", "relacao"),
                 arguments("Ônibus", "onibus"),
-                arguments(" BÁSICO", "basico"),
-                arguments(" ENTIDADE    RELAÇÃO ", "entidadeRelacao")
+                arguments(" Básico", "basico"),
+                arguments(" Entidade    Relação ", "entidadeRelacao"),
+                arguments("entidadeRelacao", "entidadeRelacao"),
+                arguments("entidade_relacao", "entidadeRelacao")
         );
     }
 

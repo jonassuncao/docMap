@@ -34,7 +34,7 @@ public abstract class TemplateUtils {
         }
     }
 
-    private static String getTemplateFile(String path) {
+    public static String getTemplateFile(String path) {
         final Map<String, String> templates = new ConcurrentHashMap<>();
         return templates.computeIfAbsent(path, TemplateUtils::loadFile);
     }

@@ -74,12 +74,12 @@ public class HibernateAttributeData {
         final Map<String, Object> params = new HashMap<>();
         params.put("set", setParams(attribute));
         params.put("get", getParams(attribute));
-        return TemplateUtils.processFile("getSetters.java", params);
+        return StringUtils.trim(TemplateUtils.processFile("getSetters.java", params));
     }
 
     private Map<String, Object> setParams(Attribute attribute) {
         final Map<String, Object> params = new HashMap<>();
-        params.put("modifier", "private");
+        params.put("modifier", "protected");
         params.put("return", "void");
         params.put("name", Normalize.classForm(attribute.getAlias()));
         params.put("typeVariable", attribute.getType().getType());
