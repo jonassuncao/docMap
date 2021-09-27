@@ -24,7 +24,7 @@ public class HibernateRelationshipDataService {
             data.resolveOneToMany(project, entityRepository.getById(relationship.getEntityFromId()));
         }
 //        if (relationship.isManyToOne()) {
-//            column = "@OneToOne"; //Class
+//            column = "@ManyToOne"; //Class
 //        }
 //        if (relationship.isManyToMany()) {
 //            column = "@ManyToMany"; //Collection

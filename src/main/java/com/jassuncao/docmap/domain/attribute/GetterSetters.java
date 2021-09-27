@@ -18,8 +18,8 @@ public interface GetterSetters {
 
     boolean isUniqueConstraint();
 
-    default Optional<String> getDescription(){
+    default Optional<String> getDescription() {
         return Optional.empty();
-    };
+    }
 
 }

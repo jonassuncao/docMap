@@ -49,13 +49,13 @@ public class Relationship extends Identifier implements GetterSetters, Cardinali
         return alias;
     }
 
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
     @Override
     public String type() {
         return Normalize.classForm(alias);
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
     }
 
     public String getName() {

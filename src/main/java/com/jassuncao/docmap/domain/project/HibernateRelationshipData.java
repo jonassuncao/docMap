@@ -3,7 +3,9 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.relationship.Relationship;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -84,10 +86,9 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         }
     }
 
-
-    private void setAlias(String alias) {
-        this.alias = alias;
-        this.name = Normalize.fieldForm(alias);
+    @Override
+    public String getGetSets() {
+        return getSets;
     }
 //    private List<String> options(Relationship relationship) {
 //        final List<String> options = new LinkedList<>();
@@ -114,13 +115,13 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
 //    }
 
     @Override
-    public String getGetSets() {
-        return getSets;
-    }
-
-    @Override
     public String getAlias() {
         return alias;
+    }
+
+    private void setAlias(String alias) {
+        this.alias = alias;
+        this.name = Normalize.fieldForm(alias);
     }
 
     @Override

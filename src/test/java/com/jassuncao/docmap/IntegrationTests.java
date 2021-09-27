@@ -2,7 +2,6 @@ package com.jassuncao.docmap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.jassuncao.docmap.infra.ApplicationConfiguration;
 import com.jassuncao.docmap.infra.ProfileApplication;
 import org.apache.commons.lang3.StringUtils;

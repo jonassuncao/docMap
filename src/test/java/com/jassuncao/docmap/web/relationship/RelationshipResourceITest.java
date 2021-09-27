@@ -62,7 +62,7 @@ class RelationshipResourceITest extends IntegrationTests {
         assertThat(result.getCardinality()).isEqualTo("1:*");
         assertThat(result.getRoleTo()).isEmpty();
         assertThat(result.getRoleFrom()).isEmpty();
-        assertThat(result.isRequired()).isFalse();
+        assertThat(result.isRequired()).isTrue();
         assertThat(result.isUniqueConstraint()).isFalse();
     }
 

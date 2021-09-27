@@ -25,7 +25,7 @@ public interface CardinalityCalculator {
 
     default Optional<Integer> toMaxCardinality() {
         final String to = StringUtils.substringBefore(getCardinality(), ":");
-        if(NumberUtils.isCreatable(to)){
+        if (NumberUtils.isCreatable(to)) {
             return Optional.of(Integer.parseInt(to));
         }
         return Optional.empty();
@@ -43,7 +43,7 @@ public interface CardinalityCalculator {
 
     default Optional<Integer> fromMaxCardinality() {
         final String from = StringUtils.substringAfter(getCardinality(), ":");
-        if(NumberUtils.isCreatable(from)){
+        if (NumberUtils.isCreatable(from)) {
             return Optional.of(Integer.parseInt(from));
         }
         return Optional.empty();

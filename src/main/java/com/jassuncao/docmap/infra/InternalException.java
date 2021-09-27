@@ -10,9 +10,8 @@ import java.util.List;
  */
 public class InternalException extends RuntimeException implements Serializable {
 
-    private final List<Object> params;
-
     private static final long serialVersionUID = 1L;
+    private final List<Object> params;
 
     public InternalException(Throwable throwable) {
         super(throwable);

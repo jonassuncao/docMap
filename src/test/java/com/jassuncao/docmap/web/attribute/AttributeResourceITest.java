@@ -1,6 +1,5 @@
 package com.jassuncao.docmap.web.attribute;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.application.attribute.AttributeCreateCommand.AttributeCreateEntityCommand;
 import com.jassuncao.docmap.application.attribute.AttributeCreateCommand.AttributeCreateRelationshipCommand;

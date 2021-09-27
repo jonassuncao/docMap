@@ -39,7 +39,7 @@ public class RelationshipTestData {
     }
 
     public RelationshipTestData entityTo(Entity entityTo) {
-        return  entityTo(entityTo.getId());
+        return entityTo(entityTo.getId());
     }
 
     public RelationshipTestData roleTo(String roleTo) {

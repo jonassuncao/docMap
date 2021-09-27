@@ -49,13 +49,13 @@ public class Attribute extends Identifier implements GetterSetters, CardinalityC
         return alias;
     }
 
+    private void setAlias(String alias) {
+        this.alias = alias;
+    }
+
     @Override
     public String type() {
         return type.getType();
-    }
-
-    private void setAlias(String alias) {
-        this.alias = alias;
     }
 
     public String getName() {

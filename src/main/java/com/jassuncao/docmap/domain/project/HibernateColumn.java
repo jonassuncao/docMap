@@ -18,6 +18,10 @@ public class HibernateColumn {
         this.attribute = attribute;
     }
 
+    public static HibernateColumn valueOf(Attribute attribute) {
+        return new HibernateColumn(attribute);
+    }
+
     public Optional<String> ifName() {
         if (StringUtils.isMixedCase(Normalize.fieldForm(attribute.getAlias()))) {
             return Optional.of(String.format("name=\"%s\"", Normalize.dataBaseForm(attribute.getAlias())));
@@ -63,9 +67,5 @@ public class HibernateColumn {
                     .map(length -> String.format("scale=%s", length));
         }
         return Optional.empty();
-    }
-
-    public static HibernateColumn valueOf(Attribute attribute) {
-        return new HibernateColumn(attribute);
     }
 }

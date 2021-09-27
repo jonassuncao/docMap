@@ -17,7 +17,7 @@ public class HibernateAttributeData extends HibernateAttributeGenericData {
     private final List<String> options;
     private final String type;
     private final String getSets;
-    private String name;
+    private final String name;
 
     HibernateAttributeData(Attribute attribute) {
         super(attribute);

@@ -23,12 +23,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  */
 class NormalizeTest extends UnitTests {
 
-    @ParameterizedTest
-    @MethodSource("packageForm")
-    public void testNormalizePackageForm(String data, String expected) throws Exception {
-        assertThat(Normalize.packageForm(data)).isEqualTo(expected);
-    }
-
     static Stream<Arguments> packageForm() {
         return Stream.of(
                 arguments("Entidade", "entidade"),
@@ -41,12 +35,6 @@ class NormalizeTest extends UnitTests {
                 arguments("entidadeRelacao", "entidaderelacao"),
                 arguments("entidade_relacao", "entidaderelacao")
         );
-    }
-
-    @ParameterizedTest
-    @MethodSource("classForm")
-    public void testNormalizeClassForm(String data, String expected) throws Exception {
-        assertThat(Normalize.classForm(data)).isEqualTo(expected);
     }
 
     static Stream<Arguments> classForm() {
@@ -62,12 +50,6 @@ class NormalizeTest extends UnitTests {
         );
     }
 
-    @ParameterizedTest
-    @MethodSource("dataBaseForm")
-    public void testNormalizeDataBaseForm(String data, String expected) throws Exception {
-        assertThat(Normalize.dataBaseForm(data)).isEqualTo(expected);
-    }
-
     static Stream<Arguments> dataBaseForm() {
         return Stream.of(
                 arguments("entidade", "entidade"),
@@ -81,12 +63,6 @@ class NormalizeTest extends UnitTests {
         );
     }
 
-    @ParameterizedTest
-    @MethodSource("fieldForm")
-    public void testNormalizeFieldFormForm(String data, String expected) throws Exception {
-        assertThat(Normalize.fieldForm(data)).isEqualTo(expected);
-    }
-
     static Stream<Arguments> fieldForm() {
         return Stream.of(
                 arguments("entidade", "entidade"),
@@ -98,6 +74,30 @@ class NormalizeTest extends UnitTests {
                 arguments("entidadeRelacao", "entidadeRelacao"),
                 arguments("entidade_relacao", "entidadeRelacao")
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("packageForm")
+    public void testNormalizePackageForm(String data, String expected) throws Exception {
+        assertThat(Normalize.packageForm(data)).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @MethodSource("classForm")
+    public void testNormalizeClassForm(String data, String expected) throws Exception {
+        assertThat(Normalize.classForm(data)).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataBaseForm")
+    public void testNormalizeDataBaseForm(String data, String expected) throws Exception {
+        assertThat(Normalize.dataBaseForm(data)).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @MethodSource("fieldForm")
+    public void testNormalizeFieldFormForm(String data, String expected) throws Exception {
+        assertThat(Normalize.fieldForm(data)).isEqualTo(expected);
     }
 
     @ParameterizedTest
