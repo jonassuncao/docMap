@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 
+import com.projeto.pessoa;
+
 
 /**
 * Descrição
@@ -67,6 +69,20 @@ public class Avaliacao implements Serializable {
     @Column(name="attr_datetime")
     private LocalDateTime attrDatetime;
 
+    /**
+     * Relação
+     */
+    @OneToOne
+    @JoinColumn(name="pessoa_id")
+    private Pessoa pessoa;
+
+    /**
+     * Relação
+     */
+    @OneToOne
+    @JoinColumn(name="principal_id")
+    private Avaliacao principal;
+
     Avaliacao() {
         super();
     }
@@ -109,5 +125,21 @@ public class Avaliacao implements Serializable {
 
     protected Optional<LocalDateTime> getAttrDatetime(){
         return Optional.ofNullable(attrDatetime);
+    }
+
+    protected void setPessoa(Pessoa pessoa){
+        this.pessoa = pessoa;
+    }
+
+    protected Optional<Pessoa> getPessoa(){
+        return Optional.ofNullable(pessoa);
+    }
+
+    protected void setPrincipal(Avaliacao principal){
+        this.principal = principal;
+    }
+
+    protected Avaliacao getPrincipal(){
+        return principal;
     }
 }

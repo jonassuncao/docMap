@@ -3,9 +3,15 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import com.jassuncao.docmap.domain.entity.Entity;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+
+import java.io.*;
+import java.net.URI;
+import java.net.URL;
 
 import static com.jassuncao.docmap.domain.attribute.AttributeTestData.createAttribute;
 import static com.jassuncao.docmap.domain.entity.EntityTestData.createEntity;
@@ -69,8 +75,10 @@ class HibernateServiceITest extends IntegrationTests {
         save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa").alias("avaliacao_avaliacao").cardinality("1:1").build());
         final var result = hibernateService.process(project);
 
-        final String avaliacao = TemplateUtils.getTemplateFile("Avaliacao.java");
+        final String oneToOne = TemplateUtils.getTemplateFile("OneToOne.java");
+        final String pessoa = TemplateUtils.getTemplateFile("Pessoa.java");
 
-        assertThat(result.get(0)).isEqualTo(avaliacao);
+        assertThat(result.get(0)).isEqualTo(oneToOne);
+        assertThat(result.get(1)).isEqualTo(pessoa);
     }
 }

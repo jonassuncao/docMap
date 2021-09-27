@@ -35,7 +35,7 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         });
         type = Normalize.classForm(entity.getAlias());
         column = "@OneToOne";
-        options = List.of(String.format("@JoinColumn(name=\"%s_id\")", Normalize.fieldForm(entity.getAlias())));
+        options = List.of(String.format("@JoinColumn(name=\"%s_id\")", Normalize.fieldForm(getName())));
         getSets = getsSets(relationship);
     }
 
