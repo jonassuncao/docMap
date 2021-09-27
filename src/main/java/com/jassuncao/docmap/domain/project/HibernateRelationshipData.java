@@ -2,10 +2,11 @@ package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.relationship.Relationship;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -35,9 +36,32 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         });
         type = Normalize.classForm(entity.getAlias());
         column = "@OneToOne";
-        options = List.of(String.format("@JoinColumn(name=\"%s_id\")", Normalize.fieldForm(getName())));
+        options = List.of(options(entity));
         getSets = getsSets(relationship);
     }
+
+    private String options(Entity entity) {
+        final List<String> columns = new LinkedList<>();
+        relationship.getRoleTo().ifPresentOrElse(nameWithRole(entity, columns), name(columns));
+        ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
+        ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
+        return String.format("@JoinColumn(%s)", String.join(", ", columns));
+    }
+
+    private Consumer<String> nameWithRole(Entity entity, List<String> columns) {
+        return role -> columns.add(String.format("name=\"%s_%s_id\"", Normalize.fieldForm(entity.getAlias()), Normalize.fieldForm(role)));
+    }
+
+    private Runnable name(List<String> columns) {
+        return () -> columns.add(String.format("name=\"%s_id\"", Normalize.fieldForm(getName())));
+    }
+
+    private void ifTrue(boolean expression, Runnable runnable) {
+        if (expression) {
+            runnable.run();
+        }
+    }
+
 
     private void setAlias(String alias) {
         this.alias = alias;

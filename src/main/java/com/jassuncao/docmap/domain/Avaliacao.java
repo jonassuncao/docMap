@@ -1,4 +1,4 @@
-package com.projeto.avaliacao;
+package com.jassuncao.docmap.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 
-import com.projeto.pessoa;
 
 
 /**
@@ -80,7 +79,7 @@ public class Avaliacao implements Serializable {
      * Relação
      */
     @OneToOne
-    @JoinColumn(name="avaliacao_principal_id", nullable=false)
+    @JoinColumn(name="principal_id")
     private Avaliacao principal;
 
     Avaliacao() {
