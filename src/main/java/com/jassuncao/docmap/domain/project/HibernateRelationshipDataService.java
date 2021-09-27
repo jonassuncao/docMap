@@ -20,9 +20,9 @@ public class HibernateRelationshipDataService {
         if (relationship.isOneToOne()) {
             data.resolveOneToOne(project, entityRepository.getById(relationship.getEntityFromId()));
         }
-//        if (relationship.isOneToMany()) {
-//            column = "@OneToMany";//Collection
-//        }
+        if (relationship.isOneToMany()) {
+            data.resolveOneToMany(project, entityRepository.getById(relationship.getEntityFromId()));
+        }
 //        if (relationship.isManyToOne()) {
 //            column = "@OneToOne"; //Class
 //        }

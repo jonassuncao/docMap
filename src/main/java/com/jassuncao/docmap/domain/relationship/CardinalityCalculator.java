@@ -1,6 +1,9 @@
 package com.jassuncao.docmap.domain.relationship;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.Optional;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -18,7 +21,14 @@ public interface CardinalityCalculator {
     default boolean isOneToOptional() {
         final String to = StringUtils.substringBefore(getCardinality(), ":");
         return "0".equals(to);
+    }
 
+    default Optional<Integer> toMaxCardinality() {
+        final String to = StringUtils.substringBefore(getCardinality(), ":");
+        if(NumberUtils.isCreatable(to)){
+            return Optional.of(Integer.parseInt(to));
+        }
+        return Optional.empty();
     }
 
     default boolean isOneFrom() {
@@ -29,6 +39,14 @@ public interface CardinalityCalculator {
     default boolean isOneFromOptional() {
         final String from = StringUtils.substringAfter(getCardinality(), ":");
         return "0".equals(from);
+    }
+
+    default Optional<Integer> fromMaxCardinality() {
+        final String from = StringUtils.substringAfter(getCardinality(), ":");
+        if(NumberUtils.isCreatable(from)){
+            return Optional.of(Integer.parseInt(from));
+        }
+        return Optional.empty();
     }
 
     default boolean isOneToOne() {

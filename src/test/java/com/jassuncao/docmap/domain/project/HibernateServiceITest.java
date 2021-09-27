@@ -81,4 +81,17 @@ class HibernateServiceITest extends IntegrationTests {
         assertThat(result.get(0)).isEqualTo(oneToOne);
         assertThat(result.get(1)).isEqualTo(pessoa);
     }
+
+    @Test
+    void buildHibernate__WithOneToMany() throws Exception {
+        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa").cardinality("0:2").build());
+        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa").uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("1:*").build());
+        final var result = hibernateService.process(project);
+
+        final String oneToMany = TemplateUtils.getTemplateFile("OneToMany.java");
+        final String pessoa = TemplateUtils.getTemplateFile("Pessoa.java");
+
+        assertThat(result.get(0)).isEqualTo(oneToMany);
+        assertThat(result.get(1)).isEqualTo(pessoa);
+    }
 }

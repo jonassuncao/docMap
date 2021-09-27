@@ -3,9 +3,7 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.relationship.Relationship;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -40,6 +38,30 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         getSets = getsSets(relationship);
     }
 
+    public void resolveOneToMany(Project project, Entity entity) {
+        relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
+            setAlias(entity.getAlias());
+            pack = Normalize.importForm(project.getName(), entity.getAlias());
+        });
+        type = String.format("%s<%s>", collectionType(), Normalize.classForm(entity.getAlias()));
+        column = "@OneToMany";
+        options = List.of(options(entity));
+        getSets = getsSets(relationship, "getSettersWithoutOptional.java");
+        initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
+    }
+
+    private String resolveCapacitySet() {
+        return relationship.fromMaxCardinality().map(capacity -> String.format("new HashSet<>(%s)", capacity)).orElse("new HashSet<>()");
+    }
+
+    private String resolveCapacityList() {
+        return relationship.fromMaxCardinality().map(capacity -> String.format("new ArrayList<>(%s)", capacity)).orElse("new LinkedList<>()");
+    }
+
+    private String collectionType() {
+        return relationship.isUniqueConstraint() ? "Set" : "List";
+    }
+
     private String options(Entity entity) {
         final List<String> columns = new LinkedList<>();
         relationship.getRoleTo().ifPresentOrElse(nameWithRole(entity, columns), name(columns));
@@ -67,7 +89,6 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         this.alias = alias;
         this.name = Normalize.fieldForm(alias);
     }
-
 //    private List<String> options(Relationship relationship) {
 //        final List<String> options = new LinkedList<>();
 //        if (relationship.isOneToOne() || relationship.isOneToMany()) {
@@ -89,6 +110,7 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
 //    public String getInicializer() {
 //        return "new LinkedList<>();";
 ////        return new HashSet<>(); if unique
+
 //    }
 
     @Override

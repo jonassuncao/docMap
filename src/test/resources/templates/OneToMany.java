@@ -73,16 +73,16 @@ public class Avaliacao implements Serializable {
     /**
      * Relação
      */
-    @OneToOne
+    @OneToMany
     @JoinColumn(name="pessoa_id")
-    private Pessoa pessoa;
+    private List<Pessoa> pessoa = new ArrayList<>(2);
 
     /**
      * Relação
      */
-    @OneToOne
-    @JoinColumn(name="avaliacao_principal_id", nullable=false)
-    private Avaliacao principal;
+    @OneToMany
+    @JoinColumn(name="avaliacao_principal_id", unique=true, nullable=false)
+    private Set<Avaliacao> principal = new HashSet<>();
 
     Avaliacao() {
         super();
@@ -128,19 +128,19 @@ public class Avaliacao implements Serializable {
         return Optional.ofNullable(attrDatetime);
     }
 
-    protected void setPessoa(Pessoa pessoa){
+    protected void setPessoa(List<Pessoa> pessoa){
         this.pessoa = pessoa;
     }
 
-    protected Optional<Pessoa> getPessoa(){
-        return Optional.ofNullable(pessoa);
+    protected List<Pessoa> getPessoa(){
+        return pessoa;
     }
 
-    protected void setPrincipal(Avaliacao principal){
+    protected void setPrincipal(Set<Avaliacao> principal){
         this.principal = principal;
     }
 
-    protected Avaliacao getPrincipal(){
+    protected Set<Avaliacao> getPrincipal(){
         return principal;
     }
 }

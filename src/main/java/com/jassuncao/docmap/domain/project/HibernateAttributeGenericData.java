@@ -30,10 +30,14 @@ abstract class HibernateAttributeGenericData {
     }
 
     public String getsSets(GetterSetters getterSetters) {
+        return getsSets(getterSetters, "getSetters.java");
+    }
+
+    public String getsSets(GetterSetters getterSetters, String template) {
         final Map<String, Object> params = new HashMap<>();
         params.put("set", setParams());
         params.put("get", getParams(getterSetters));
-        return StringUtils.trim(TemplateUtils.processFile("getSetters.java", params));
+        return StringUtils.trim(TemplateUtils.processFile(template, params));
     }
 
     private Map<String, Object> setParams() {
