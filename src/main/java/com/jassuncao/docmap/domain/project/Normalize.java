@@ -83,4 +83,14 @@ public final class Normalize {
         }
         throw ValidationException.valueOf(I18nCommon.NORMALIZE_ERROR_SPLITPRESERVETOKENS, value);
     }
+
+    public static String importForm(String project, String object) {
+        return new StringBuilder()
+                .append("com.")
+                .append(Normalize.packageForm(project))
+                .append(".")
+                .append(Normalize.packageForm(object))
+                .toString();
+    }
+
 }

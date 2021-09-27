@@ -1,6 +1,8 @@
 package com.jassuncao.docmap.domain.relationship;
 
 import com.jassuncao.docmap.domain.Identifier;
+import com.jassuncao.docmap.domain.attribute.GetterSetters;
+import com.jassuncao.docmap.domain.project.Normalize;
 
 import javax.persistence.Entity;
 import java.util.Optional;
@@ -12,7 +14,7 @@ import java.util.UUID;
  */
 
 @Entity
-public class Relationship extends Identifier {
+public class Relationship extends Identifier implements GetterSetters, CardinalityCalculator {
 
     private String alias;
     private String name;
@@ -20,7 +22,6 @@ public class Relationship extends Identifier {
     private String roleTo;
     private UUID entityFromId;
     private String roleFrom;
-    private boolean required;
     private boolean uniqueConstraint;
     private String cardinality;
 
@@ -40,13 +41,17 @@ public class Relationship extends Identifier {
         data.getRoleTo().ifPresentOrElse(this::setRoleTo, () -> roleTo = null);
         setEntityFromId(data.getEntityFromId());
         data.getRoleFrom().ifPresentOrElse(this::setRoleFrom, () -> roleFrom = null);
-        setRequired(data.isRequired());
         setUniqueConstraint(data.isUniqueConstraint());
         setCardinality(data.getCardinality());
     }
 
     public String getAlias() {
         return alias;
+    }
+
+    @Override
+    public String type() {
+        return Normalize.classForm(alias);
     }
 
     public void setAlias(String alias) {
@@ -94,11 +99,7 @@ public class Relationship extends Identifier {
     }
 
     public boolean isRequired() {
-        return required;
-    }
-
-    public void setRequired(boolean required) {
-        this.required = required;
+        return !isOneToOptional();
     }
 
     public boolean isUniqueConstraint() {

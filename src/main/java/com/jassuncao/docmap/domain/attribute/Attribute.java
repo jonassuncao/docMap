@@ -1,6 +1,7 @@
 package com.jassuncao.docmap.domain.attribute;
 
 import com.jassuncao.docmap.domain.Identifier;
+import com.jassuncao.docmap.domain.relationship.CardinalityCalculator;
 
 import javax.persistence.*;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @Entity
 @DiscriminatorColumn(name = "attribute_type", discriminatorType = DiscriminatorType.STRING)
-public class Attribute extends Identifier {
+public class Attribute extends Identifier implements GetterSetters, CardinalityCalculator {
 
     private String alias;
     private String name;
@@ -46,6 +47,11 @@ public class Attribute extends Identifier {
 
     public String getAlias() {
         return alias;
+    }
+
+    @Override
+    public String type() {
+        return type.getType();
     }
 
     private void setAlias(String alias) {

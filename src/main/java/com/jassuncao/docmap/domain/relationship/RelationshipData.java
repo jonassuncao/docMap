@@ -16,7 +16,6 @@ public class RelationshipData {
     private String roleTo;
     private UUID entityFromId;
     private String roleFrom;
-    private boolean required;
     private boolean uniqueConstraint;
     private String cardinality;
 
@@ -66,14 +65,6 @@ public class RelationshipData {
 
     public void setRoleFrom(String roleFrom) {
         this.roleFrom = roleFrom;
-    }
-
-    public boolean isRequired() {
-        return required;
-    }
-
-    public void setRequired(boolean required) {
-        this.required = required;
     }
 
     public boolean isUniqueConstraint() {

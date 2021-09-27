@@ -2,47 +2,42 @@ package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.domain.attribute.Attribute;
 import com.jassuncao.docmap.domain.entity.Entity;
+import com.jassuncao.docmap.domain.relationship.Relationship;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 15/09/2021
  */
-public class HibernateData {
+@Component
+public class HibernateDataService {
 
-    private final List<? extends Attribute> attributes;
-    private final Entity entity;
-    private final Project project;
+    private final HibernateRelationshipDataService hibernateRelationshipDataService;
 
-    public HibernateData(Project project, Entity entity, List<? extends Attribute> attributes) {
-        this.project = project;
-        this.entity = entity;
-        this.attributes = attributes;
+    public HibernateDataService(HibernateRelationshipDataService hibernateRelationshipDataService) {
+        this.hibernateRelationshipDataService = hibernateRelationshipDataService;
     }
 
-    public Map<String, Object> getParams() {
+    public Map<String, Object> getParams(Project project, Entity entity, List<Relationship> relationships, List<? extends Attribute> attributes) {
         final Map<String, Object> params = new HashMap<>();
-        params.put("package", pack());
+        params.put("package", Normalize.importForm(project.getName(), entity.getAlias()));
         params.put("headers", header(project, entity));
         params.put("entity", Normalize.dataBaseForm(entity.getAlias()));
         params.put("className", Normalize.classForm(entity.getAlias()));
         params.put("attributes", attributes.stream().map(HibernateAttributeData::new).collect(Collectors.toList()));
+        params.put("relationships", relationships.stream().map(buildRelationship(project)).collect(Collectors.toList()));
         return params;
     }
 
-    private String pack() {
-        return new StringBuilder()
-                .append("com.")
-                .append(Normalize.packageForm(project.getName()))
-                .append(".")
-                .append(Normalize.packageForm(entity.getAlias()))
-                .toString();
+    private Function<Relationship, HibernateRelationshipData> buildRelationship(Project project) {
+        return relationship -> hibernateRelationshipDataService.buildRelationship(project, relationship);
     }
 
     private List<String> header(Project project, Entity entity) {

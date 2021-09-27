@@ -38,7 +38,6 @@ public class RelationshipApplication {
         command.getRoleTo().ifPresent(data::setRoleTo);
         data.setEntityFromId(command.getEntityFromId());
         command.getRoleFrom().ifPresent(data::setRoleFrom);
-        data.setRequired(command.isRequired());
         data.setUniqueConstraint(command.isUniqueConstraint());
         data.setCardinality(command.getCardinality());
         return data;

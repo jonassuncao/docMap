@@ -1,5 +1,7 @@
 package com.jassuncao.docmap.domain.relationship;
 
+import com.jassuncao.docmap.domain.entity.Entity;
+
 import java.util.UUID;
 
 /**
@@ -14,7 +16,6 @@ public class RelationshipTestData {
     private String roleTo;
     private UUID entityFrom;
     private String roleFrom;
-    private boolean required;
     private boolean uniqueConstraint;
     private String cardinality = "1:1";
 
@@ -37,6 +38,10 @@ public class RelationshipTestData {
         return this;
     }
 
+    public RelationshipTestData entityTo(Entity entityTo) {
+        return  entityTo(entityTo.getId());
+    }
+
     public RelationshipTestData roleTo(String roleTo) {
         this.roleTo = roleTo;
         return this;
@@ -47,13 +52,12 @@ public class RelationshipTestData {
         return this;
     }
 
-    public RelationshipTestData roleFrom(String roleFrom) {
-        this.roleFrom = roleFrom;
-        return this;
+    public RelationshipTestData entityFrom(Entity entityFrom) {
+        return entityFrom(entityFrom.getId());
     }
 
-    public RelationshipTestData required(boolean required) {
-        this.required = required;
+    public RelationshipTestData roleFrom(String roleFrom) {
+        this.roleFrom = roleFrom;
         return this;
     }
 
@@ -72,10 +76,9 @@ public class RelationshipTestData {
         data.setAlias(alias);
         data.setName(name);
         data.setEntityFromId(entityFrom);
-        data.setRoleFrom(roleFrom);
+        data.setRoleTo(roleTo);
         data.setEntityToId(entityTo);
         data.setRoleFrom(roleFrom);
-        data.setRequired(required);
         data.setUniqueConstraint(uniqueConstraint);
         data.setCardinality(cardinality);
         return data;

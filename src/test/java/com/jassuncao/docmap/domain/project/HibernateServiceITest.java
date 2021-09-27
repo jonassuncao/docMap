@@ -7,12 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-
 import static com.jassuncao.docmap.domain.attribute.AttributeTestData.createAttribute;
 import static com.jassuncao.docmap.domain.entity.EntityTestData.createEntity;
 import static com.jassuncao.docmap.domain.project.ProjectTestData.createProject;
+import static com.jassuncao.docmap.domain.relationship.RelationshipTestData.createRelationship;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
@@ -63,5 +61,16 @@ class HibernateServiceITest extends IntegrationTests {
 
         assertThat(result.get(0)).isEqualTo(avaliacao);
         assertThat(result.get(1)).isEqualTo(pessoa);
+    }
+
+    @Test
+    void buildHibernate__WithOneToOne() throws Exception {
+        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa").cardinality("0:1").build());
+        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa").alias("avaliacao_avaliacao").cardinality("1:1").build());
+        final var result = hibernateService.process(project);
+
+        final String avaliacao = TemplateUtils.getTemplateFile("Avaliacao.java");
+
+        assertThat(result.get(0)).isEqualTo(avaliacao);
     }
 }

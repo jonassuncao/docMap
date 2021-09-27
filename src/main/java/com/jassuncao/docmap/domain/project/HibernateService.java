@@ -2,13 +2,14 @@ package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.domain.attribute.AttributeEntity;
 import com.jassuncao.docmap.domain.attribute.AttributeEntityRepository;
-import com.jassuncao.docmap.domain.attribute.AttributeRelationshipRepository;
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.entity.EntityRepository;
+import com.jassuncao.docmap.domain.relationship.Relationship;
 import com.jassuncao.docmap.domain.relationship.RelationshipRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,31 +21,33 @@ import java.util.stream.Collectors;
 public class HibernateService {
 
     private final EntityRepository entityRepository;
+    private final HibernateDataService hibernateDataService;
     private final RelationshipRepository relationshipRepository;
     private final AttributeEntityRepository attributeEntityRepository;
-    private final AttributeRelationshipRepository attributeRelationshipRepository;
 
     public HibernateService(EntityRepository entityRepository,
+                            HibernateDataService hibernateDataService,
                             RelationshipRepository relationshipRepository,
-                            AttributeEntityRepository attributeEntityRepository,
-                            AttributeRelationshipRepository attributeRelationshipRepository) {
+                            AttributeEntityRepository attributeEntityRepository) {
         this.entityRepository = entityRepository;
+        this.hibernateDataService = hibernateDataService;
         this.relationshipRepository = relationshipRepository;
         this.attributeEntityRepository = attributeEntityRepository;
-        this.attributeRelationshipRepository = attributeRelationshipRepository;
     }
+
 
     public List<String> process(Project project) {
         return entityRepository.findByProjectId(project.getId()).stream()
                 .map(hibernateData(project))
-                .map(hibernateData -> TemplateUtils.processFile("entity.java", hibernateData.getParams()))
+                .map(params -> TemplateUtils.processFile("entity.java", params))
                 .collect(Collectors.toList());
     }
 
-    private Function<Entity, HibernateData> hibernateData(Project project) {
+    private Function<Entity, Map<String, Object>> hibernateData(Project project) {
         return entity -> {
             final List<AttributeEntity> attributes = attributeEntityRepository.findByEntityId(entity.getId());
-            return new HibernateData(project, entity, attributes);
+            final List<Relationship> relationships = relationshipRepository.findByEntityToId(entity.getId());
+            return hibernateDataService.getParams(project, entity, relationships, attributes);
         };
     }
 }

@@ -4,44 +4,28 @@ import com.jassuncao.docmap.domain.attribute.Attribute;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
  * 15/09/2021
  */
-public class HibernateAttributeData {
+public class HibernateAttributeData extends HibernateAttributeGenericData {
 
-    private final String name;
-    private final String type;
     private final String column;
     private final List<String> options;
-    private final List<String> description;
-    private String getSets;
+    private final String type;
+    private final String getSets;
+    private String name;
 
     HibernateAttributeData(Attribute attribute) {
+        super(attribute);
         name = Normalize.fieldForm(attribute.getAlias());
-        type = type(attribute);
+        type = attribute.type();
         column = column(attribute);
         options = options(attribute);
-        description = description(attribute);
-        getSets = getSets(attribute);
-    }
-
-    private List<String> description(Attribute attribute) {
-        final var value = new StringBuilder()
-                .append(attribute.getName())
-                .append(StringUtils.LF)
-                .append(attribute.getDescription().orElse(StringUtils.EMPTY))
-                .toString();
-        return Normalize.splitPreserveTokens(value, 120);
-    }
-
-    private String type(Attribute attribute) {
-        return attribute.getType().getType();
+        getSets = getsSets(attribute);
     }
 
     private String column(Attribute attribute) {
@@ -70,54 +54,33 @@ public class HibernateAttributeData {
         return options;
     }
 
-    private String getSets(Attribute attribute) {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("set", setParams(attribute));
-        params.put("get", getParams(attribute));
-        return StringUtils.trim(TemplateUtils.processFile("getSetters.java", params));
+    @Override
+    public String getGetSets() {
+        return getSets;
     }
 
-    private Map<String, Object> setParams(Attribute attribute) {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("modifier", "protected");
-        params.put("return", "void");
-        params.put("name", Normalize.classForm(attribute.getAlias()));
-        params.put("typeVariable", attribute.getType().getType());
-        params.put("variable", Normalize.fieldForm(attribute.getAlias()));
-        return params;
+    @Override
+    public String getAlias() {
+        return name;
     }
 
-    private Map<String, Object> getParams(Attribute attribute) {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("modifier", "protected");
-        params.put("name", Normalize.classForm(attribute.getAlias()));
-        params.put("typeVariable", attribute.getType().getType());
-        params.put("required", attribute.isRequired());
-        params.put("variable", Normalize.fieldForm(attribute.getAlias()));
-        return params;
-    }
-
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public String getColumn() {
         return column;
     }
 
+    @Override
     public List<String> getOptions() {
         return options;
-    }
-
-    public List<String> getDescription() {
-        return description;
-    }
-
-    public String getGetSets() {
-        return getSets;
     }
 }
