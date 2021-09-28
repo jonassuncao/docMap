@@ -58,7 +58,7 @@ public interface CardinalityCalculator {
     }
 
     default boolean isManyToOne() {
-        return !isOneFrom() && isOneTo();
+        return !isOneTo() && isOneFrom();
     }
 
     default boolean isManyToMany() {

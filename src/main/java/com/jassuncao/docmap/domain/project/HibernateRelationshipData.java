@@ -52,6 +52,17 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
     }
 
+    public void resolveManyToOne(Project project, Entity entity) {
+        relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
+            setAlias(entity.getAlias());
+            pack = Normalize.importForm(project.getName(), entity.getAlias());
+        });
+        type = Normalize.classForm(entity.getAlias());
+        column = "@ManyToOne"; //Class
+        options = List.of(options(entity));
+        getSets = getsSets(relationship);
+    }
+
     private String resolveCapacitySet() {
         return relationship.fromMaxCardinality().map(capacity -> String.format("new HashSet<>(%s)", capacity)).orElse("new HashSet<>()");
     }
@@ -108,11 +119,6 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
 //        return options;
 //    }
 //
-//    public String getInicializer() {
-//        return "new LinkedList<>();";
-////        return new HashSet<>(); if unique
-
-//    }
 
     @Override
     public String getAlias() {
