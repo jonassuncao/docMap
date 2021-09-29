@@ -101,6 +101,7 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         relationship.getRoleTo().ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(getName())));
         ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
         ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
+        columns.add(String.format("foreignKey = @ForeignKey(name = \"%s_fkey\")", Normalize.dataBaseForm(relationship.getAlias())));
         return String.format("@JoinColumn(%s)", String.join(", ", columns));
     }
 

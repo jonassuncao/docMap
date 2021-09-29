@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -77,14 +78,14 @@ public class Avaliacao implements Serializable {
      * Relação
      */
     @OneToOne
-    @JoinColumn(name="pessoa_id")
+    @JoinColumn(name="pessoa_id", foreignKey = @ForeignKey(name = "avaliacao_pessoa_fkey"))
     private Pessoa pessoa;
 
     /**
      * Relação
      */
     @OneToOne
-    @JoinColumn(name="principal_id", nullable=false)
+    @JoinColumn(name="principal_id", nullable=false, foreignKey = @ForeignKey(name = "avaliacao_avaliacao_fkey"))
     private Avaliacao principal;
 
     Avaliacao() {

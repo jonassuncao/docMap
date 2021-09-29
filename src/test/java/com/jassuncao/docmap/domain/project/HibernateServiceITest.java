@@ -69,6 +69,7 @@ class HibernateServiceITest extends IntegrationTests {
                 .cardinality("0:1").build());
         save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
                 .alias("avaliacao_avaliacao").cardinality("1:1").build());
+
         final var result = hibernateService.process(project);
 
         final String oneToOne = TemplateUtils.getTemplateFile("OneToOne.java");
@@ -84,6 +85,7 @@ class HibernateServiceITest extends IntegrationTests {
                 .cardinality("0:2").build());
         save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
                 .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("1:*").build());
+
         final var result = hibernateService.process(project);
 
         final String oneToMany = TemplateUtils.getTemplateFile("OneToMany.java");
@@ -99,6 +101,7 @@ class HibernateServiceITest extends IntegrationTests {
                 .cardinality("5:1").build());
         save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
                 .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:1").build());
+
         final var result = hibernateService.process(project);
 
         final String manyToOne = TemplateUtils.getTemplateFile("ManyToOne.java");
