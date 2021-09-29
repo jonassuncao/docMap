@@ -30,37 +30,37 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         this.relationship = relationship;
     }
 
-    public void resolveOneToOne(Project project, Entity from) {
+    public void resolveOneToOne(Project project, Entity to) {
         relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
-            setAlias(from.getAlias());
-            pack = Normalize.importForm(project.getName(), from.getAlias());
+            setAlias(to.getAlias());
+            pack = Normalize.importForm(project.getName(), to.getAlias());
         });
-        type = Normalize.classForm(from.getAlias());
+        type = Normalize.classForm(to.getAlias());
         column = "@OneToOne";
-        options = List.of(options());
+        options = List.of(options(relationship.getRoleTo()));
         getSets = getsSets(relationship);
     }
 
-    public void resolveOneToMany(Project project, Entity from) {
-        relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
-            setAlias(from.getAlias());
-            pack = Normalize.importForm(project.getName(), from.getAlias());
+    public void resolveOneToMany(Project project, Entity from, Entity to) {
+        relationship.getRoleFrom().ifPresentOrElse(this::setAlias, () -> {
+            setAlias(to.getAlias());
+            pack = Normalize.importForm(project.getName(), to.getAlias());
         });
-        type = String.format("%s<%s>", collectionType(), Normalize.classForm(from.getAlias()));
+        type = String.format("%s<%s>", collectionType(), Normalize.classForm(to.getAlias()));
         column = "@OneToMany";
-        options = List.of(options());
-        getSets = getsSets(relationship, "getSettersWithoutOptional.java");
+        options = List.of(options(relationship.getRoleFrom(), from.getAlias()));
+        getSets = getsSets(relationship, "getSettersWithoutOptional.java", getAlias());
         initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
     }
 
-    public void resolveManyToOne(Project project, Entity from) {
+    public void resolveManyToOne(Project project, Entity to) {
         relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
-            setAlias(from.getAlias());
-            pack = Normalize.importForm(project.getName(), from.getAlias());
+            setAlias(to.getAlias());
+            pack = Normalize.importForm(project.getName(), to.getAlias());
         });
-        type = Normalize.classForm(from.getAlias());
+        type = Normalize.classForm(to.getAlias());
         column = "@ManyToOne";
-        options = List.of(options());
+        options = List.of(options(relationship.getRoleTo()));
         getSets = getsSets(relationship);
     }
 
@@ -72,7 +72,7 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         type = String.format("%s<%s>", collectionType(), Normalize.classForm(from.getAlias()));
         column = "@ManyToMany";
         options = List.of(helperOptionsManyMany(optionsWithoutRole(relationship.getRoleTo(), to), optionsWithoutRole(relationship.getRoleFrom(), from)));
-        getSets = getsSets(relationship, "getSettersWithoutOptional.java");
+        getSets = getsSets(relationship, "getSettersWithoutOptional.java" , getAlias());
         initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
     }
 
@@ -85,20 +85,24 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
     }
 
     private String resolveCapacitySet() {
-        return relationship.fromMaxCardinality().map(capacity -> String.format("new HashSet<>(%s)", capacity)).orElse("new HashSet<>()");
+        return relationship.toMaxCardinality().map(capacity -> String.format("new HashSet<>(%s)", capacity)).orElse("new HashSet<>()");
     }
 
     private String resolveCapacityList() {
-        return relationship.fromMaxCardinality().map(capacity -> String.format("new ArrayList<>(%s)", capacity)).orElse("new LinkedList<>()");
+        return relationship.toMaxCardinality().map(capacity -> String.format("new ArrayList<>(%s)", capacity)).orElse("new LinkedList<>()");
     }
 
     private String collectionType() {
         return relationship.isUniqueConstraint() ? "Set" : "List";
     }
 
-    private String options() {
+    private String options(Optional<String> role) {
+        return options(role, getName());
+    }
+
+    private String options(Optional<String> role, String name) {
         final List<String> columns = new LinkedList<>();
-        relationship.getRoleTo().ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(getName())));
+        role.ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(name)));
         ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
         ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
         columns.add(String.format("foreignKey = @ForeignKey(name = \"%s_fkey\")", Normalize.dataBaseForm(relationship.getAlias())));
@@ -110,6 +114,7 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         role.ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(entity.getAlias())));
         ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
         ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
+        columns.add(String.format("\n\t\t\t\tforeignKey = @ForeignKey(name = \"%s_fkey\")", Normalize.dataBaseForm(relationship.getAlias())));
         return String.format("@JoinColumn(%s)", String.join(", ", columns));
     }
 

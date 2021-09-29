@@ -46,7 +46,7 @@ public class HibernateService {
     private Function<Entity, Map<String, Object>> hibernateData(Project project) {
         return entity -> {
             final List<AttributeEntity> attributes = attributeEntityRepository.findByEntityId(entity.getId());
-            final List<Relationship> relationships = relationshipRepository.findByEntityToId(entity.getId());
+            final List<Relationship> relationships = relationshipRepository.findByEntityFromId(entity.getId());
             return hibernateDataService.getParams(project, entity, relationships, attributes);
         };
     }

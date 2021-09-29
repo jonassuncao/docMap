@@ -78,15 +78,15 @@ public class Avaliacao implements Serializable {
      * Relação
      */
     @OneToMany
-    @JoinColumn(name="pessoa_id", foreignKey = @ForeignKey(name = "avaliacao_pessoa_fkey"))
+    @JoinColumn(name="avaliacao_id", foreignKey = @ForeignKey(name = "avaliacao_pessoa_fkey"))
     private List<Pessoa> pessoa = new ArrayList<>(2);
 
     /**
      * Relação
      */
     @OneToMany
-    @JoinColumn(name="principal_id", unique=true, nullable=false, foreignKey = @ForeignKey(name = "avaliacao_avaliacao_fkey"))
-    private Set<Avaliacao> principal = new HashSet<>();
+    @JoinColumn(name="alternativa_id", nullable=false, foreignKey = @ForeignKey(name = "avaliacao_avaliacao_fkey"))
+    private List<Avaliacao> alternativa = new LinkedList<>();
 
     Avaliacao() {
         super();
@@ -140,11 +140,11 @@ public class Avaliacao implements Serializable {
         return pessoa;
     }
 
-    protected void setPrincipal(Set<Avaliacao> principal){
-        this.principal = principal;
+    protected void setAlternativa(List<Avaliacao> alternativa){
+        this.alternativa = alternativa;
     }
 
-    protected Set<Avaliacao> getPrincipal(){
-        return principal;
+    protected List<Avaliacao> getAlternativa(){
+        return alternativa;
     }
 }

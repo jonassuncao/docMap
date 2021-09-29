@@ -14,5 +14,5 @@ import java.util.UUID;
 @Repository
 public interface RelationshipRepository extends CrudRepository<Relationship> {
 
-    List<Relationship> findByEntityToId(UUID entityId);
+    List<Relationship> findByEntityFromId(UUID entityId);
 }

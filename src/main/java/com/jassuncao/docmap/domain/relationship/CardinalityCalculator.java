@@ -14,17 +14,17 @@ public interface CardinalityCalculator {
     String getCardinality();
 
     default boolean isOneTo() {
-        final String to = StringUtils.substringBefore(getCardinality(), ":");
+        final String to = StringUtils.substringAfter(getCardinality(), ":");
         return "1".equals(to) || isOneToOptional();
     }
 
     default boolean isOneToOptional() {
-        final String to = StringUtils.substringBefore(getCardinality(), ":");
+        final String to = StringUtils.substringAfter(getCardinality(), ":");
         return "0".equals(to);
     }
 
     default Optional<Integer> toMaxCardinality() {
-        final String to = StringUtils.substringBefore(getCardinality(), ":");
+        final String to = StringUtils.substringAfter(getCardinality(), ":");
         if (NumberUtils.isCreatable(to)) {
             return Optional.of(Integer.parseInt(to));
         }
@@ -32,17 +32,17 @@ public interface CardinalityCalculator {
     }
 
     default boolean isOneFrom() {
-        final String from = StringUtils.substringAfter(getCardinality(), ":");
+        final String from = StringUtils.substringBefore(getCardinality(), ":");
         return "1".equals(from) || isOneFromOptional();
     }
 
     default boolean isOneFromOptional() {
-        final String from = StringUtils.substringAfter(getCardinality(), ":");
+        final String from = StringUtils.substringBefore(getCardinality(), ":");
         return "0".equals(from);
     }
 
     default Optional<Integer> fromMaxCardinality() {
-        final String from = StringUtils.substringAfter(getCardinality(), ":");
+        final String from = StringUtils.substringBefore(getCardinality(), ":");
         if (NumberUtils.isCreatable(from)) {
             return Optional.of(Integer.parseInt(from));
         }
@@ -50,15 +50,15 @@ public interface CardinalityCalculator {
     }
 
     default boolean isOneToOne() {
-        return isOneTo() && isOneFrom();
+        return isOneFrom() && isOneTo();
     }
 
     default boolean isOneToMany() {
-        return isOneTo() && !isOneFrom();
+        return isOneFrom() && !isOneTo();
     }
 
     default boolean isManyToOne() {
-        return !isOneTo() && isOneFrom();
+        return !isOneFrom() && isOneTo();
     }
 
     default boolean isManyToMany() {

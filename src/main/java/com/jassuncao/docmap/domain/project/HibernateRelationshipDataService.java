@@ -21,11 +21,11 @@ public class HibernateRelationshipDataService {
         final Entity entityTo = entityRepository.getById(relationship.getEntityToId());
         final Entity entityFrom = entityRepository.getById(relationship.getEntityFromId());
         if (relationship.isOneToOne()) {
-            data.resolveOneToOne(project, entityFrom);
+            data.resolveOneToOne(project, entityTo);
         } else if (relationship.isOneToMany()) {
-            data.resolveOneToMany(project, entityFrom);
+            data.resolveOneToMany(project, entityFrom, entityTo);
         } else if (relationship.isManyToOne()) {
-            data.resolveManyToOne(project, entityFrom);
+            data.resolveManyToOne(project, entityTo);
         } else if (relationship.isManyToMany()) {
             data.resolveManyToMany(project, entityFrom, entityTo);
         }

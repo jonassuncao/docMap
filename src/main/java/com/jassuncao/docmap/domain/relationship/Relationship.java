@@ -99,7 +99,7 @@ public class Relationship extends Identifier implements GetterSetters, Cardinali
     }
 
     public boolean isRequired() {
-        return !isOneToOptional();
+        return !isOneFromOptional();
     }
 
     public boolean isUniqueConstraint() {

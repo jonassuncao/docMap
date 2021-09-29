@@ -3,9 +3,14 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import com.jassuncao.docmap.domain.entity.Entity;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
 
 import static com.jassuncao.docmap.domain.attribute.AttributeTestData.createAttribute;
 import static com.jassuncao.docmap.domain.entity.EntityTestData.createEntity;
@@ -29,26 +34,27 @@ class HibernateServiceITest extends IntegrationTests {
     @BeforeEach
     void setup() throws Exception {
         project = save(createProject().build());
-        entityTo = save(createEntity().projectId(project.getId())
+        entityFrom = save(createEntity().projectId(project.getId())
                 .alias("avaliacao")
                 .name("Avaliação")
                 .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut libero justo, ultrices non urna id, elementum ultrices justo. Curabitur molestie velit odio. In ullamcorper vitae arcu vel rutrum. Sed quam metus, fermentum ac leo eu, fringilla rhoncus urna.")
                 .build());
-        entityFrom = save(createEntity().projectId(project.getId())
+        entityTo = save(createEntity().projectId(project.getId())
                 .alias("pessoa")
                 .name("Pessoa")
                 .build());
-        save(createAttribute().entityId(entityTo.getId()).alias("attrText").type(TypeData.Text).length("200")
+        save(createAttribute().entityId(entityFrom.getId()).alias("attrText").type(TypeData.Text).length("200")
                 .required(true).uniqueConstraint(true).buildEntity());
-        save(createAttribute().entityId(entityTo.getId()).alias("attrLong").type(TypeData.Long).required(true).buildEntity());
-        save(createAttribute().entityId(entityTo.getId()).alias("attrInteger").type(TypeData.Integer).required(true).buildEntity());
-        save(createAttribute().entityId(entityTo.getId()).alias("attrNumber").type(TypeData.Number).length("5,4").required(true).buildEntity());
-        save(createAttribute().entityId(entityTo.getId()).alias("attrDatetime").type(TypeData.Datetime).buildEntity());
-        save(createAttribute().entityId(entityFrom.getId()).alias("attrDate").type(TypeData.Date)
+        save(createAttribute().entityId(entityFrom.getId()).alias("attrLong").type(TypeData.Long).required(true).buildEntity());
+        save(createAttribute().entityId(entityFrom.getId()).alias("attrInteger").type(TypeData.Integer).required(true).buildEntity());
+        save(createAttribute().entityId(entityFrom.getId()).alias("attrNumber").type(TypeData.Number).length("5,4").required(true).buildEntity());
+        save(createAttribute().entityId(entityFrom.getId()).alias("attrDatetime").type(TypeData.Datetime).buildEntity());
+
+        save(createAttribute().entityId(entityTo.getId()).alias("attrDate").type(TypeData.Date)
                 .required(true).uniqueConstraint(true).buildEntity());
-        save(createAttribute().entityId(entityFrom.getId()).alias("attrTimestamp").type(TypeData.Timestamp).buildEntity());
-        save(createAttribute().entityId(entityFrom.getId()).alias("attrBoolean").type(TypeData.Boolean).buildEntity());
-        save(createAttribute().entityId(entityFrom.getId()).alias("attrBinary").type(TypeData.Binary).buildEntity());
+        save(createAttribute().entityId(entityTo.getId()).alias("attrTimestamp").type(TypeData.Timestamp).buildEntity());
+        save(createAttribute().entityId(entityTo.getId()).alias("attrBoolean").type(TypeData.Boolean).buildEntity());
+        save(createAttribute().entityId(entityTo.getId()).alias("attrBinary").type(TypeData.Binary).buildEntity());
     }
 
     @Test
@@ -65,9 +71,9 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithOneToOne() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa")
                 .cardinality("0:1").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+        save(createRelationship().entityFrom(entityFrom).roleFrom("alternativa").entityTo(entityFrom).roleTo("Principal")
                 .alias("avaliacao_avaliacao").cardinality("1:1").build());
 
         final var result = hibernateService.process(project);
@@ -81,10 +87,10 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithOneToMany() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa")
                 .cardinality("0:2").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
-                .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("1:*").build());
+        save(createRelationship().entityFrom(entityFrom).roleFrom("alternativa").entityTo(entityFrom).roleTo("Principal")
+                .alias("avaliacao_avaliacao").cardinality("1:*").build());
 
         final var result = hibernateService.process(project);
 
@@ -97,9 +103,9 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithManyToOne() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa")
                 .cardinality("5:1").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+        save(createRelationship().entityFrom(entityFrom).roleFrom("alternativa").entityTo(entityFrom).roleTo("Principal")
                 .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:1").build());
 
         final var result = hibernateService.process(project);
@@ -113,10 +119,11 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithManyToMany() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa")
                 .cardinality("5:5").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+        save(createRelationship().entityFrom(entityFrom).roleFrom("alternativa").entityTo(entityFrom).roleTo("Principal")
                 .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:*").build());
+
         final var result = hibernateService.process(project);
 
         final String manyToMany = TemplateUtils.getTemplateFile("ManyToMany.java");

@@ -29,34 +29,38 @@ abstract class HibernateAttributeGenericData {
         return Normalize.splitPreserveTokens(value, 120);
     }
 
-    public String getsSets(GetterSetters getterSetters) {
-        return getsSets(getterSetters, "getSetters.java");
+    public String getsSets(GetterSetters getterSetters, String alias) {
+        return getsSets(getterSetters, "getSetters.java", alias);
     }
 
-    public String getsSets(GetterSetters getterSetters, String template) {
+    public String getsSets(GetterSetters getterSetters) {
+        return getsSets(getterSetters, "getSetters.java", getAlias());
+    }
+
+    public String getsSets(GetterSetters getterSetters, String template, String alias) {
         final Map<String, Object> params = new HashMap<>();
-        params.put("set", setParams());
-        params.put("get", getParams(getterSetters));
+        params.put("set", setParams(alias));
+        params.put("get", getParams(getterSetters, alias));
         return StringUtils.trim(TemplateUtils.processFile(template, params));
     }
 
-    private Map<String, Object> setParams() {
+    private Map<String, Object> setParams(String alias) {
         final Map<String, Object> params = new HashMap<>();
         params.put("modifier", "protected");
         params.put("return", "void");
-        params.put("name", Normalize.classForm(getAlias()));
+        params.put("name", Normalize.classForm(alias));
         params.put("typeVariable", getType());
-        params.put("variable", Normalize.fieldForm(getAlias()));
+        params.put("variable", Normalize.fieldForm(alias));
         return params;
     }
 
-    private Map<String, Object> getParams(GetterSetters getterSetters) {
+    private Map<String, Object> getParams(GetterSetters getterSetters, String alias) {
         final Map<String, Object> params = new HashMap<>();
         params.put("modifier", "protected");
-        params.put("name", Normalize.classForm(getAlias()));
+        params.put("name", Normalize.classForm(alias));
         params.put("typeVariable", getType());
         params.put("required", getterSetters.isRequired());
-        params.put("variable", Normalize.fieldForm(getAlias()));
+        params.put("variable", Normalize.fieldForm(alias));
         return params;
     }
 
