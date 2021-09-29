@@ -71,18 +71,24 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         });
         type = String.format("%s<%s>", collectionType(), Normalize.classForm(from.getAlias()));
         column = "@ManyToMany";
-        options = List.of(joinTable(options(relationship.getRoleTo(), to.getAlias()),
-                options(relationship.getRoleFrom(), from.getAlias())));
+        options = List.of(joinTable(from, to));
         getSets = getsSets(relationship, "getSettersWithoutOptional.java", getAlias());
         initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
     }
 
-    private String joinTable(String joinFrom, String joinTo) {
+    private String joinTable(Entity from, Entity to) {
+        String joinFrom = options(relationship.getRoleFrom(), from.getAlias());
+        String joinTo = options(relationship.getRoleTo(), to.getAlias());
         return new StringBuilder()
                 .append(String.format("@JoinTable(name=\"%s\",\n", Normalize.dataBaseForm(relationship.getAlias())))
-                .append(String.format("\t\tjoinColumns={%s},\n", joinFrom))
-                .append(String.format("\t\tinverseJoinColumns={%s})", joinTo))
+                .append(String.format("\t\tjoinColumns={%s},\n", joinTo))
+                .append(String.format("\t\tinverseJoinColumns={%s})", joinFrom))
+                .append(String.format("\t\tuniqueConstraints={%s})", uniqueHelper(from, to)))
                 .toString();
+    }
+
+    private String uniqueHelper(Entity from, Entity to) {
+        return "WIP"; //TODO
     }
 
     private String resolveCapacitySet() {
