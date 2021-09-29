@@ -71,12 +71,13 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         });
         type = String.format("%s<%s>", collectionType(), Normalize.classForm(from.getAlias()));
         column = "@ManyToMany";
-        options = List.of(helperOptionsManyMany(optionsWithoutRole(relationship.getRoleTo(), to), optionsWithoutRole(relationship.getRoleFrom(), from)));
-        getSets = getsSets(relationship, "getSettersWithoutOptional.java" , getAlias());
+        options = List.of(joinTable(options(relationship.getRoleTo(), to.getAlias()),
+                options(relationship.getRoleFrom(), from.getAlias())));
+        getSets = getsSets(relationship, "getSettersWithoutOptional.java", getAlias());
         initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
     }
 
-    private String helperOptionsManyMany(String joinFrom, String joinTo) {
+    private String joinTable(String joinFrom, String joinTo) {
         return new StringBuilder()
                 .append(String.format("@JoinTable(name=\"%s\",\n", Normalize.dataBaseForm(relationship.getAlias())))
                 .append(String.format("\t\tjoinColumns={%s},\n", joinFrom))
@@ -103,15 +104,6 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
     private String options(Optional<String> role, String name) {
         final List<String> columns = new LinkedList<>();
         role.ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(name)));
-        ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
-        ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
-        columns.add(String.format("foreignKey = @ForeignKey(name = \"%s_fkey\")", Normalize.dataBaseForm(relationship.getAlias())));
-        return String.format("@JoinColumn(%s)", String.join(", ", columns));
-    }
-
-    private String optionsWithoutRole(Optional<String> role, Entity entity) {
-        final List<String> columns = new LinkedList<>();
-        role.ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(entity.getAlias())));
         ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
         ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
         columns.add(String.format("\n\t\t\t\tforeignKey = @ForeignKey(name = \"%s_fkey\")", Normalize.dataBaseForm(relationship.getAlias())));
