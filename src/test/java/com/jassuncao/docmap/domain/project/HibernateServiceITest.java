@@ -3,14 +3,9 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import com.jassuncao.docmap.domain.entity.Entity;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
 
 import static com.jassuncao.docmap.domain.attribute.AttributeTestData.createAttribute;
 import static com.jassuncao.docmap.domain.entity.EntityTestData.createEntity;
