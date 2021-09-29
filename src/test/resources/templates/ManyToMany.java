@@ -22,6 +22,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 
+import com.projeto.pessoa;
+
 
 /**
 * Descrição
@@ -69,6 +71,24 @@ public class Avaliacao implements Serializable {
     @Column(name="attr_datetime")
     private LocalDateTime attrDatetime;
 
+    /**
+     * Relação
+     */
+    @ManyToMany
+    @JoinTable(name="avaliacao_pessoa",
+		joinColumns={@JoinColumn(name="avaliacao_id", nullable=false)},
+		inverseJoinColumns={@JoinColumn(name="pessoa_id", nullable=false)})
+    private List<Pessoa> pessoa = new ArrayList<>(5);
+
+    /**
+     * Relação
+     */
+    @ManyToMany
+    @JoinTable(name="avaliacao_avaliacao",
+		joinColumns={@JoinColumn(name="principal_id", unique=true, nullable=false)},
+		inverseJoinColumns={@JoinColumn(name="alternativa_id", unique=true, nullable=false)})
+    private Set<Avaliacao> principal = new HashSet<>();
+
     Avaliacao() {
         super();
     }
@@ -111,5 +131,21 @@ public class Avaliacao implements Serializable {
 
     protected Optional<LocalDateTime> getAttrDatetime(){
         return Optional.ofNullable(attrDatetime);
+    }
+
+    protected void setPessoa(List<Pessoa> pessoa){
+        this.pessoa = pessoa;
+    }
+
+    protected List<Pessoa> getPessoa(){
+        return pessoa;
+    }
+
+    protected void setPrincipal(Set<Avaliacao> principal){
+        this.principal = principal;
+    }
+
+    protected Set<Avaliacao> getPrincipal(){
+        return principal;
     }
 }

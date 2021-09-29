@@ -6,6 +6,7 @@ import com.jassuncao.docmap.domain.relationship.Relationship;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -29,38 +30,58 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         this.relationship = relationship;
     }
 
-    public void resolveOneToOne(Project project, Entity entity) {
+    public void resolveOneToOne(Project project, Entity from) {
         relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
-            setAlias(entity.getAlias());
-            pack = Normalize.importForm(project.getName(), entity.getAlias());
+            setAlias(from.getAlias());
+            pack = Normalize.importForm(project.getName(), from.getAlias());
         });
-        type = Normalize.classForm(entity.getAlias());
+        type = Normalize.classForm(from.getAlias());
         column = "@OneToOne";
-        options = List.of(options(entity));
+        options = List.of(options());
         getSets = getsSets(relationship);
     }
 
-    public void resolveOneToMany(Project project, Entity entity) {
+    public void resolveOneToMany(Project project, Entity from) {
         relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
-            setAlias(entity.getAlias());
-            pack = Normalize.importForm(project.getName(), entity.getAlias());
+            setAlias(from.getAlias());
+            pack = Normalize.importForm(project.getName(), from.getAlias());
         });
-        type = String.format("%s<%s>", collectionType(), Normalize.classForm(entity.getAlias()));
+        type = String.format("%s<%s>", collectionType(), Normalize.classForm(from.getAlias()));
         column = "@OneToMany";
-        options = List.of(options(entity));
+        options = List.of(options());
         getSets = getsSets(relationship, "getSettersWithoutOptional.java");
         initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
     }
 
-    public void resolveManyToOne(Project project, Entity entity) {
+    public void resolveManyToOne(Project project, Entity from) {
         relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
-            setAlias(entity.getAlias());
-            pack = Normalize.importForm(project.getName(), entity.getAlias());
+            setAlias(from.getAlias());
+            pack = Normalize.importForm(project.getName(), from.getAlias());
         });
-        type = Normalize.classForm(entity.getAlias());
-        column = "@ManyToOne"; //Class
-        options = List.of(options(entity));
+        type = Normalize.classForm(from.getAlias());
+        column = "@ManyToOne";
+        options = List.of(options());
         getSets = getsSets(relationship);
+    }
+
+    public void resolveManyToMany(Project project, Entity from, Entity to) {
+        relationship.getRoleTo().ifPresentOrElse(this::setAlias, () -> {
+            setAlias(from.getAlias());
+            pack = Normalize.importForm(project.getName(), from.getAlias());
+        });
+        type = String.format("%s<%s>", collectionType(), Normalize.classForm(from.getAlias()));
+        column = "@ManyToMany";
+        options = List.of(helperOptionsManyMany(optionsWithoutRole(relationship.getRoleTo(), to), optionsWithoutRole(relationship.getRoleFrom(), from)));
+        getSets = getsSets(relationship, "getSettersWithoutOptional.java");
+        initializer = relationship.isUniqueConstraint() ? resolveCapacitySet() : resolveCapacityList();
+    }
+
+    private String helperOptionsManyMany(String joinFrom, String joinTo) {
+        return new StringBuilder()
+                .append(String.format("@JoinTable(name=\"%s\",\n", Normalize.dataBaseForm(relationship.getAlias())))
+                .append(String.format("\t\tjoinColumns={%s},\n", joinFrom))
+                .append(String.format("\t\tinverseJoinColumns={%s})", joinTo))
+                .toString();
     }
 
     private String resolveCapacitySet() {
@@ -75,20 +96,28 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
         return relationship.isUniqueConstraint() ? "Set" : "List";
     }
 
-    private String options(Entity entity) {
+    private String options() {
         final List<String> columns = new LinkedList<>();
-        relationship.getRoleTo().ifPresentOrElse(nameWithRole(entity, columns), name(columns));
+        relationship.getRoleTo().ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(getName())));
         ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
         ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
         return String.format("@JoinColumn(%s)", String.join(", ", columns));
     }
 
-    private Consumer<String> nameWithRole(Entity entity, List<String> columns) {
-        return role -> columns.add(String.format("name=\"%s_%s_id\"", Normalize.fieldForm(entity.getAlias()), Normalize.fieldForm(role)));
+    private String optionsWithoutRole(Optional<String> role, Entity entity) {
+        final List<String> columns = new LinkedList<>();
+        role.ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(entity.getAlias())));
+        ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
+        ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
+        return String.format("@JoinColumn(%s)", String.join(", ", columns));
     }
 
-    private Runnable name(List<String> columns) {
-        return () -> columns.add(String.format("name=\"%s_id\"", Normalize.fieldForm(getName())));
+    private String name(String name) {
+        return String.format("name=\"%s_id\"", Normalize.fieldForm(name));
+    }
+
+    private Consumer<String> nameWithRole(List<String> columns) {
+        return role -> columns.add(String.format("name=\"%s_id\"", Normalize.fieldForm(role)));
     }
 
     private void ifTrue(boolean expression, Runnable runnable) {
@@ -101,24 +130,6 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
     public String getGetSets() {
         return getSets;
     }
-//    private List<String> options(Relationship relationship) {
-//        final List<String> options = new LinkedList<>();
-//        if (relationship.isOneToOne() || relationship.isOneToMany()) {
-//            options.add(String.format("@JoinColumn(name=\"%s_fk\")", Normalize.fieldForm(entityRepository.getById(relationship.getEntityToId()).getAlias()))); //Class
-//        }
-//        if (relationship.isManyToOne()) {
-//            options.add(String.format("@JoinColumn(name=\"%s_fk\")", Normalize.fieldForm(entityRepository.getById(relationship.getEntityFromId()).getAlias()))); //Class
-//        }
-//        if (relationship.isManyToMany()) {
-//            options.add("    @JoinTable(\n" +
-//                    "        name=\"EMPLOYER_EMPLOYEE\",\n" +
-//                    "        joinColumns=@JoinColumn(name=\"EMPER_ID\"),\n" +
-//                    "        inverseJoinColumns=@JoinColumn(name=\"EMPEE_ID\")\n" +
-//                    "    )"); //Collection
-//        }
-//        return options;
-//    }
-//
 
     @Override
     public String getAlias() {

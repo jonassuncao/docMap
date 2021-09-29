@@ -1,5 +1,6 @@
 package com.jassuncao.docmap.domain.project;
 
+import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.entity.EntityRepository;
 import com.jassuncao.docmap.domain.relationship.Relationship;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,17 @@ public class HibernateRelationshipDataService {
 
     public HibernateRelationshipData buildRelationship(Project project, Relationship relationship) {
         final HibernateRelationshipData data = new HibernateRelationshipData(relationship);
+        final Entity entityTo = entityRepository.getById(relationship.getEntityToId());
+        final Entity entityFrom = entityRepository.getById(relationship.getEntityFromId());
         if (relationship.isOneToOne()) {
-            data.resolveOneToOne(project, entityRepository.getById(relationship.getEntityFromId()));
+            data.resolveOneToOne(project, entityFrom);
+        } else if (relationship.isOneToMany()) {
+            data.resolveOneToMany(project, entityFrom);
+        } else if (relationship.isManyToOne()) {
+            data.resolveManyToOne(project, entityFrom);
+        } else if (relationship.isManyToMany()) {
+            data.resolveManyToMany(project, entityFrom, entityTo);
         }
-        if (relationship.isOneToMany()) {
-            data.resolveOneToMany(project, entityRepository.getById(relationship.getEntityFromId()));
-        }
-        if (relationship.isManyToOne()) {
-            data.resolveManyToOne(project, entityRepository.getById(relationship.getEntityFromId()));
-        }
-//        if (relationship.isManyToMany()) {
-//            column = "@ManyToMany"; //Collection
-//        }
         return data;
     }
 

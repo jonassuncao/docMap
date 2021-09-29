@@ -3,14 +3,9 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.IntegrationTests;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import com.jassuncao.docmap.domain.entity.Entity;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
 
 import static com.jassuncao.docmap.domain.attribute.AttributeTestData.createAttribute;
 import static com.jassuncao.docmap.domain.entity.EntityTestData.createEntity;
@@ -70,8 +65,10 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithOneToOne() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa").cardinality("0:1").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa").alias("avaliacao_avaliacao").cardinality("1:1").build());
+        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+                .cardinality("0:1").build());
+        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+                .alias("avaliacao_avaliacao").cardinality("1:1").build());
         final var result = hibernateService.process(project);
 
         final String oneToOne = TemplateUtils.getTemplateFile("OneToOne.java");
@@ -83,8 +80,10 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithOneToMany() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa").cardinality("0:2").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa").uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("1:*").build());
+        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+                .cardinality("0:2").build());
+        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+                .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("1:*").build());
         final var result = hibernateService.process(project);
 
         final String oneToMany = TemplateUtils.getTemplateFile("OneToMany.java");
@@ -96,14 +95,31 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithManyToOne() throws Exception {
-        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa").cardinality("5:1").build());
-        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa").uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:1").build());
+        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+                .cardinality("5:1").build());
+        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+                .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:1").build());
         final var result = hibernateService.process(project);
 
-        final String oneToMany = TemplateUtils.getTemplateFile("ManyToOne.java");
+        final String manyToOne = TemplateUtils.getTemplateFile("ManyToOne.java");
         final String pessoa = TemplateUtils.getTemplateFile("Pessoa.java");
 
-        assertThat(result.get(0)).isEqualTo(oneToMany);
+        assertThat(result.get(0)).isEqualTo(manyToOne);
+        assertThat(result.get(1)).isEqualTo(pessoa);
+    }
+
+    @Test
+    void buildHibernate__WithManyToMany() throws Exception {
+        save(createRelationship().entityTo(entityTo).entityFrom(entityFrom).alias("avaliacao_pessoa")
+                .cardinality("5:5").build());
+        save(createRelationship().entityTo(entityTo).roleTo("Principal").entityFrom(entityTo).roleFrom("alternativa")
+                .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:*").build());
+        final var result = hibernateService.process(project);
+
+        final String manyToMany = TemplateUtils.getTemplateFile("ManyToMany.java");
+        final String pessoa = TemplateUtils.getTemplateFile("Pessoa.java");
+
+        assertThat(result.get(0)).isEqualTo(manyToMany);
         assertThat(result.get(1)).isEqualTo(pessoa);
     }
 }

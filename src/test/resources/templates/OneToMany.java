@@ -16,6 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
@@ -81,7 +82,7 @@ public class Avaliacao implements Serializable {
      * Relação
      */
     @OneToMany
-    @JoinColumn(name="avaliacao_principal_id", unique=true, nullable=false)
+    @JoinColumn(name="principal_id", unique=true, nullable=false)
     private Set<Avaliacao> principal = new HashSet<>();
 
     Avaliacao() {
