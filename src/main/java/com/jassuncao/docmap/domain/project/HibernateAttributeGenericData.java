@@ -14,9 +14,12 @@ import java.util.Map;
 abstract class HibernateAttributeGenericData {
 
     private final List<String> description;
+    private final boolean unique;
 
     HibernateAttributeGenericData(GetterSetters getterSetters) {
         description = description(getterSetters);
+        unique = getterSetters.isUniqueConstraint();
+
     }
 
 
@@ -78,6 +81,10 @@ abstract class HibernateAttributeGenericData {
     public abstract String getType();
 
     public abstract String getColumn();
+
+    public boolean isUnique() {
+        return unique;
+    }
 
     public abstract List<String> getOptions();
 

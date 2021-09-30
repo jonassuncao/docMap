@@ -4,8 +4,7 @@ import com.jassuncao.docmap.domain.attribute.Attribute;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -32,7 +31,6 @@ public class HibernateAttributeData extends HibernateAttributeGenericData {
         final HibernateColumn column = HibernateColumn.valueOf(attribute);
         final List<String> columns = new LinkedList<>();
         column.ifName().ifPresent(columns::add);
-        column.ifUnique().ifPresent(columns::add);
         column.ifNullable().ifPresent(columns::add);
         column.ifLength().ifPresent(columns::add);
         column.ifPrecision().ifPresent(columns::add);

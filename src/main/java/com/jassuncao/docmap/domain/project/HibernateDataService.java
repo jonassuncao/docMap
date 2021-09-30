@@ -3,14 +3,14 @@ package com.jassuncao.docmap.domain.project;
 import com.jassuncao.docmap.domain.attribute.Attribute;
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.relationship.Relationship;
+import com.jassuncao.docmap.infra.CastUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -33,7 +33,24 @@ public class HibernateDataService {
         params.put("className", Normalize.classForm(entity.getAlias()));
         params.put("attributes", attributes.stream().map(HibernateAttributeData::new).collect(Collectors.toList()));
         params.put("relationships", relationships.stream().map(buildRelationship(project)).collect(Collectors.toList()));
+        params.put("uniques", uniqueResolver(params));
         return params;
+    }
+
+    private Map<String, String> uniqueResolver(Map<String, Object> params) {
+        return Stream.of(params.get("attributes"),params.get("relationships"))
+                .map(items -> (List<HibernateAttributeGenericData>) items)
+                .flatMap(List::stream)
+                .filter(HibernateAttributeGenericData::isUnique)
+                .map(HibernateAttributeGenericData::getName)
+                .map(Normalize::dataBaseForm)
+                .collect(Collectors.toMap(uniqueConstraintName(params), String::valueOf));
+    }
+
+    private Function<String, String> uniqueConstraintName(Map<String, Object> params) {
+        final Optional<String> entityName = CastUtils.ifCast(params.get("entity"), String.class);
+        return attributeName -> entityName.map(entity -> String.format("%s_%s_un", entity, attributeName))
+                .orElseGet(() -> String.format("%s_un", attributeName));
     }
 
     private Function<Relationship, HibernateRelationshipData> buildRelationship(Project project) {

@@ -29,13 +29,6 @@ public class HibernateColumn {
         return Optional.empty();
     }
 
-    public Optional<String> ifUnique() {
-        if (attribute.isUniqueConstraint()) {
-            return Optional.of("unique=true");
-        }
-        return Optional.empty();
-    }
-
     public Optional<String> ifNullable() {
         if (attribute.isRequired()) {
             return Optional.of("nullable=false");

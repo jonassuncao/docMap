@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 <#list relationships as relationship>
 <#if relationship.pack??>import ${relationship.pack};</#if>
@@ -35,7 +36,16 @@ import javax.persistence.Table;
 </#list>
 */
 @Entity
+<#if uniques?has_content>
+@Table(name = "avaliacao", uniqueConstraints = {
+    <#list uniques?keys as unq>
+        <#assign hasMore = unq?has_next>
+        @UniqueConstraint(name = "${unq}", columnNames = {"${uniques[unq]}"})<#if hasMore>,</#if>
+    </#list>
+)})
+<#else>
 @Table(name="${entity}")
+</#if>
 public class ${className} implements Serializable {
 
     private static final long serialVersionUID = 1L;

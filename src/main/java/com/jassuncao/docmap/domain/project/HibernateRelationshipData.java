@@ -2,12 +2,11 @@ package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.relationship.Relationship;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -77,18 +76,36 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
     }
 
     private String joinTable(Entity from, Entity to) {
-        String joinFrom = options(relationship.getRoleFrom(), from.getAlias());
-        String joinTo = options(relationship.getRoleTo(), to.getAlias());
         return new StringBuilder()
                 .append(String.format("@JoinTable(name=\"%s\",\n", Normalize.dataBaseForm(relationship.getAlias())))
-                .append(String.format("\t\tjoinColumns={%s},\n", joinTo))
-                .append(String.format("\t\tinverseJoinColumns={%s})", joinFrom))
-                .append(String.format("\t\tuniqueConstraints={%s})", uniqueHelper(from, to)))
+                .append(String.format("\t\tjoinColumns={%s},\n", options(relationship.getRoleTo(), to.getAlias())))
+                .append(String.format("\t\tinverseJoinColumns={%s}", options(relationship.getRoleFrom(), from.getAlias())))
+                .append(uniqueHelper(uniqueResolver(relationship, resolveAlias(relationship.getRoleFrom(), from.getAlias()), resolveAlias(relationship.getRoleTo(), to.getAlias()))))
+                .append(")")
                 .toString();
     }
 
-    private String uniqueHelper(Entity from, Entity to) {
-        return "WIP"; //TODO
+    private String resolveAlias(Optional<String> role, String defaultAlias) {
+        return  Normalize.dataBaseForm(role.orElse(defaultAlias));
+    }
+
+    private String uniqueHelper(Map<String, List<String>> unique) {
+        if(unique.isEmpty()){
+            return StringUtils.EMPTY;
+        }
+        final String constraintName = unique.keySet().stream().reduce(StringUtils.EMPTY, String::concat);
+        final String columns = unique.entrySet().stream().map(Map.Entry::getValue).flatMap(List::stream)
+                .collect(Collectors.joining(", "));
+        return String.format(",\n\t\tuniqueConstraints={\n\t\t\t\t@UniqueConstraint(name = \"%s\", columnNames = {%s})}", constraintName, columns);
+    }
+
+    private Map<String, List<String>> uniqueResolver(Relationship relationship, String... aliases) {
+        if(relationship.isUniqueConstraint()){
+            final String constraintName = String.format("%s_un", Normalize.dataBaseForm(relationship.getAlias()));
+            final List<String> columns = Arrays.asList(aliases).stream().map(alias -> String.format("\"%s_id\"", alias)).collect(Collectors.toList());
+            return Map.of(constraintName, columns);
+        }
+        return new HashMap<>();
     }
 
     private String resolveCapacitySet() {
@@ -110,7 +127,6 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
     private String options(Optional<String> role, String name) {
         final List<String> columns = new LinkedList<>();
         role.ifPresentOrElse(nameWithRole(columns), () -> columns.add(name(name)));
-        ifTrue(relationship.isUniqueConstraint(), () -> columns.add("unique=true"));
         ifTrue(relationship.isRequired(), () -> columns.add("nullable=false"));
         columns.add(String.format("\n\t\t\t\tforeignKey = @ForeignKey(name = \"%s_fkey\")", Normalize.dataBaseForm(relationship.getAlias())));
         return String.format("@JoinColumn(%s)", String.join(", ", columns));
