@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.projeto.pessoa;
 
@@ -47,7 +48,7 @@ public class Avaliacao implements Serializable {
     * name
     */
     @Id
-    @Column(name="attr_text", unique=true, nullable=false, length=200)
+    @Column(name="attr_text", nullable=false, length=200)
     private String attrText;
 
     /**
@@ -79,8 +80,10 @@ public class Avaliacao implements Serializable {
      */
     @ManyToMany
     @JoinTable(name="avaliacao_pessoa",
-		joinColumns={@JoinColumn(name="avaliacao_id", nullable=false)},
-		inverseJoinColumns={@JoinColumn(name="pessoa_id", nullable=false)})
+		joinColumns={@JoinColumn(name="pessoa_id", nullable=false, 
+				foreignKey = @ForeignKey(name = "avaliacao_pessoa_pessoa_fkey"))},
+		inverseJoinColumns={@JoinColumn(name="avaliacao_id", nullable=false, 
+				foreignKey = @ForeignKey(name = "avaliacao_pessoa_avaliacao_fkey"))})
     private List<Pessoa> pessoa = new ArrayList<>(5);
 
     /**
@@ -88,8 +91,10 @@ public class Avaliacao implements Serializable {
      */
     @ManyToMany
     @JoinTable(name="avaliacao_avaliacao",
-		joinColumns={@JoinColumn(name="principal_id", unique=true, nullable=false)},
-		inverseJoinColumns={@JoinColumn(name="alternativa_id", unique=true, nullable=false)})
+		joinColumns={@JoinColumn(name="principal_id", nullable=false, 
+				foreignKey = @ForeignKey(name = "avaliacao_avaliacao_principal_fkey"))},
+		inverseJoinColumns={@JoinColumn(name="alternativa_id", nullable=false, 
+				foreignKey = @ForeignKey(name = "avaliacao_avaliacao_alternativa_fkey"))})
     private Set<Avaliacao> principal = new HashSet<>();
 
     Avaliacao() {

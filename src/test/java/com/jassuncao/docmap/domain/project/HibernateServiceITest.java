@@ -54,7 +54,7 @@ class HibernateServiceITest extends IntegrationTests {
                 .required(true).uniqueConstraint(true).buildEntity());
         save(createAttribute().entityId(entityTo.getId()).alias("attrTimestamp").type(TypeData.Timestamp).buildEntity());
         save(createAttribute().entityId(entityTo.getId()).alias("attrBoolean").type(TypeData.Boolean).buildEntity());
-        save(createAttribute().entityId(entityTo.getId()).alias("attrBinary").type(TypeData.Binary).buildEntity());
+        save(createAttribute().entityId(entityTo.getId()).alias("attrBinary").type(TypeData.Binary).uniqueConstraint(true).buildEntity());
     }
 
     @Test
@@ -71,7 +71,7 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithOneToOne() throws Exception {
-        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa")
+        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa").uniqueConstraint(true)
                 .cardinality("0:1").build());
         save(createRelationship().entityFrom(entityFrom).roleFrom("alternativa").entityTo(entityFrom).roleTo("Principal")
                 .alias("avaliacao_avaliacao").cardinality("1:1").build());
@@ -87,7 +87,7 @@ class HibernateServiceITest extends IntegrationTests {
 
     @Test
     void buildHibernate__WithOneToMany() throws Exception {
-        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa")
+        save(createRelationship().entityFrom(entityFrom).entityTo(entityTo).alias("avaliacao_pessoa").uniqueConstraint(true)
                 .cardinality("0:2").build());
         save(createRelationship().entityFrom(entityFrom).roleFrom("alternativa").entityTo(entityFrom).roleTo("Principal")
                 .alias("avaliacao_avaliacao").cardinality("1:*").build());
@@ -125,6 +125,10 @@ class HibernateServiceITest extends IntegrationTests {
                 .uniqueConstraint(true).alias("avaliacao_avaliacao").cardinality("*:*").build());
 
         final var result = hibernateService.process(project);
+
+        URL url = this.getClass().getResource("/templates");
+        File parentDirectory = new File(new File(new URI(url.toString())), "arquivo.txt");
+        FileUtils.writeStringToFile(parentDirectory, result.get(0), "UTF-8");
 
         final String manyToMany = TemplateUtils.getTemplateFile("ManyToMany.java");
         final String pessoa = TemplateUtils.getTemplateFile("Pessoa.java");

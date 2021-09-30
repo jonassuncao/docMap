@@ -7,7 +7,10 @@ import com.jassuncao.docmap.infra.CastUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,13 +41,32 @@ public class HibernateDataService {
     }
 
     private Map<String, String> uniqueResolver(Map<String, Object> params) {
-        return Stream.of(params.get("attributes"),params.get("relationships"))
-                .map(items -> (List<HibernateAttributeGenericData>) items)
-                .flatMap(List::stream)
+        final Map<String, String> attributes = attributes((List<HibernateAttributeGenericData>) params.get("attributes"))
+                .collect(Collectors.toMap(uniqueConstraintName(params), String::valueOf));
+        final Map<String, String> relationships = relationships((List<HibernateAttributeGenericData>) params.get("relationships"))
+                .collect(Collectors.toMap(uniqueConstraintName(params), String::valueOf));
+        final HashMap<String, String> result = new HashMap<>();
+        result.putAll(attributes);
+        result.putAll(relationships);
+        return result;
+    }
+
+    private Stream<String> attributes(List<HibernateAttributeGenericData> attributes) {
+        return attributes.stream()
+                .filter(attribute -> !attribute.getOptions().contains("@Id"))
+                .filter(HibernateAttributeGenericData::isUnique)
+                .map(HibernateAttributeGenericData::getName)
+                .map(Normalize::dataBaseForm);
+
+    }
+
+    private Stream<String> relationships(List<HibernateAttributeGenericData> relationships) {
+        return relationships.stream()
+                .filter(relationship -> !List.of("@ManyToMany", "@OneToMany").contains(relationship.getColumn()))
                 .filter(HibernateAttributeGenericData::isUnique)
                 .map(HibernateAttributeGenericData::getName)
                 .map(Normalize::dataBaseForm)
-                .collect(Collectors.toMap(uniqueConstraintName(params), String::valueOf));
+                .map(a -> String.format("%s_id", a));
     }
 
     private Function<String, String> uniqueConstraintName(Map<String, Object> params) {

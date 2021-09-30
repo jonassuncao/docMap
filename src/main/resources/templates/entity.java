@@ -37,12 +37,12 @@ import javax.persistence.UniqueConstraint;
 */
 @Entity
 <#if uniques?has_content>
-@Table(name = "avaliacao", uniqueConstraints = {
+@Table(name = "${entity}", uniqueConstraints = {
     <#list uniques?keys as unq>
         <#assign hasMore = unq?has_next>
         @UniqueConstraint(name = "${unq}", columnNames = {"${uniques[unq]}"})<#if hasMore>,</#if>
     </#list>
-)})
+})
 <#else>
 @Table(name="${entity}")
 </#if>
@@ -51,14 +51,14 @@ public class ${className} implements Serializable {
     private static final long serialVersionUID = 1L;
 
 <#list attributes as attribute>
- <#if attribute.description?size??>
+ <#if attribute.description?has_content>
     /**
     <#list attribute.description as desc>
     * ${desc}
     </#list>
     */
  </#if>
- <#if attribute.options?size??>
+ <#if attribute.options?has_content>
   <#list attribute.options as opt>
     ${opt}
   </#list>
@@ -70,7 +70,7 @@ public class ${className} implements Serializable {
 
 </#list>
 <#list relationships as relationship>
-<#if relationship.description?size??>
+<#if relationship.description?has_content>
     /**
      <#list relationship.description as desc>
      * ${desc}
@@ -80,7 +80,7 @@ public class ${className} implements Serializable {
 <#if relationship.column??>
     ${relationship.column}
 </#if>
-<#if relationship.options?size??>
+<#if relationship.options?has_content>
 <#list relationship.options as opt>
     ${opt}
 </#list>

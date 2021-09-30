@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.projeto.pessoa;
 
@@ -47,7 +48,7 @@ public class Avaliacao implements Serializable {
     * name
     */
     @Id
-    @Column(name="attr_text", unique=true, nullable=false, length=200)
+    @Column(name="attr_text", nullable=false, length=200)
     private String attrText;
 
     /**
@@ -78,14 +79,16 @@ public class Avaliacao implements Serializable {
      * Relação
      */
     @OneToMany
-    @JoinColumn(name="avaliacao_id", foreignKey = @ForeignKey(name = "avaliacao_pessoa_fkey"))
-    private List<Pessoa> pessoa = new ArrayList<>(2);
+    @JoinColumn(name="avaliacao_id", 
+				foreignKey = @ForeignKey(name = "avaliacao_pessoa_avaliacao_fkey"))
+    private Set<Pessoa> pessoa = new HashSet<>(2);
 
     /**
      * Relação
      */
     @OneToMany
-    @JoinColumn(name="alternativa_id", nullable=false, foreignKey = @ForeignKey(name = "avaliacao_avaliacao_fkey"))
+    @JoinColumn(name="alternativa_id", nullable=false, 
+				foreignKey = @ForeignKey(name = "avaliacao_avaliacao_alternativa_fkey"))
     private List<Avaliacao> alternativa = new LinkedList<>();
 
     Avaliacao() {
@@ -132,11 +135,11 @@ public class Avaliacao implements Serializable {
         return Optional.ofNullable(attrDatetime);
     }
 
-    protected void setPessoa(List<Pessoa> pessoa){
+    protected void setPessoa(Set<Pessoa> pessoa){
         this.pessoa = pessoa;
     }
 
-    protected List<Pessoa> getPessoa(){
+    protected Set<Pessoa> getPessoa(){
         return pessoa;
     }
 

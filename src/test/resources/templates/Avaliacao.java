@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 /**
@@ -45,7 +46,7 @@ public class Avaliacao implements Serializable {
     * name
     */
     @Id
-    @Column(name="attr_text", unique=true, nullable=false, length=200)
+    @Column(name="attr_text", nullable=false, length=200)
     private String attrText;
 
     /**
