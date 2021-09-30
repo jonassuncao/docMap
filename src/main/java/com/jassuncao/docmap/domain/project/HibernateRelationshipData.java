@@ -2,11 +2,12 @@ package com.jassuncao.docmap.domain.project;
 
 import com.jassuncao.docmap.domain.entity.Entity;
 import com.jassuncao.docmap.domain.relationship.Relationship;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
@@ -84,7 +85,7 @@ public class HibernateRelationshipData extends HibernateAttributeGenericData {
     }
 
     private String resolveAlias(Optional<String> role, String defaultAlias) {
-        return  Normalize.dataBaseForm(role.orElse(defaultAlias));
+        return Normalize.dataBaseForm(role.orElse(defaultAlias));
     }
 
     private String resolveCapacitySet() {

@@ -4,7 +4,8 @@ import com.jassuncao.docmap.domain.attribute.Attribute;
 import com.jassuncao.docmap.domain.attribute.TypeData;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author jonathas.assuncao - jaa020399@gmail.com
